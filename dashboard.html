@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>User Dashboard - WorkBridge</title>
+  <style>
+    :root {
+      --light-blue: #a8c0ff;
+      --ash: #e3e6e8;
+      --white: #ffffff;
+      --dark-blue: #3357a4;
+      --gray-dark: #3a3a3a;
+      --btn-hover: #274a85;
+      --sidebar-bg: #d1d9f7;
+    }
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--ash);
+      color: var(--gray-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    nav {
+      background-color: var(--light-blue);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky; top: 0; z-index: 1000;
+    }
+    nav .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.8rem 1rem;
+    }
+    nav .logo {
+      font-weight: 700; font-size: 1.8rem; color: var(--dark-blue);
+      letter-spacing: 2px; cursor: pointer; user-select: none;
+    }
+    nav ul {
+      list-style: none; display: flex; gap: 1.5rem;
+    }
+    nav ul li a {
+      text-decoration: none; color: var(--dark-blue);
+      font-weight: 600; padding: 0.5rem 0.7rem; border-radius: 5px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      display: inline-block; position: relative;
+    }
+    nav ul li a:hover,
+    nav ul li a:focus {
+      background-color: var(--dark-blue);
+      color: var(--white);
+      outline: none;
+    }
+    nav ul li a::after {
+      content: '';
+      display: block; height: 3px;
+      background: var(--dark-blue);
+      width: 0;
+      transition: width 0.3s ease;
+      border-radius: 2px;
+      margin-top: 3px;
+    }
+    nav ul li a:hover::after,
+    nav ul li a:focus::after {
+      width: 100%;
+    }
+    main {
+      flex-grow: 1;
+      max-width: 1200px;
+      margin: 1rem auto 3rem auto;
+      display: flex;
+      gap: 1.5rem;
+      padding: 1rem;
+      background-color: var(--white);
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    aside.sidebar {
+      width: 260px;
+      background-color: var(--sidebar-bg);
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
+    }
+    aside.sidebar nav ul {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    aside.sidebar nav ul li a {
+      font-weight: 600;
+      color: var(--dark-blue);
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      background-color: transparent;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      display: block;
+    }
+    aside.sidebar nav ul li a:hover,
+    aside.sidebar nav ul li a:focus {
+      background-color: var(--dark-blue);
+      color: var(--white);
+      outline: none;
+    }
+    section.dashboard-content {
+      flex-grow: 1;
+      padding: 1rem 2rem;
+    }
+    section.dashboard-content h2 {
+      color: var(--dark-blue);
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+    .welcome-msg {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+    .stats {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .card {
+      background-color: var(--ash);
+      flex: 1 1 180px;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+      text-align: center;
+    }
+    .card h3 {
+      font-size: 1.3rem;
+      color: var(--dark-blue);
+      margin-bottom: 0.5rem;
+    }
+    .card p {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #222;
+    }
+    @media (max-width: 900px) {
+      main {
+        flex-direction: column;
+        margin: 1rem;
+        padding: 1rem;
+      }
+      aside.sidebar {
+        width: 100%;
+        margin-bottom: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav role="navigation" aria-label="Primary Navigation">
+    <div class="container">
+      <div class="logo" tabindex="0">WorkBridge</div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="search.html">Find Jobs/Services</a></li>
+        <li><a href="post-job.html">Post Job/Service</a></li>
+        <li><a href="dashboard.html" aria-current="page">Dashboard</a></li>
+        <li><a href="notifications.html">Notifications</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="terms.html">Terms & Privacy</a></li>
+        <li><a href="register.html">Register</a></li>
+        <li><a href="logout.html">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <aside class="sidebar" aria-label="User Dashboard Navigation">
+      <nav>
+        <ul>
+          <li><a href="dashboard.html" aria-current="page">Overview</a></li>
+          <li><a href="my-posts.html">My Posts</a></li>
+          <li><a href="applications.html">Applications</a></li>
+          <li><a href="profile.html">Profile Settings</a></li>
+          <li><a href="messages.html">Messages</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <section class="dashboard-content" tabindex="0">
+      <h2>Welcome, Turan!</h2>
+      <p class="welcome-msg">Here is a quick overview of your WorkBridge activity.</p>
+
+      <div class="stats" role="region" aria-label="User activity statistics">
+        <div class="card" tabindex="0">
+          <h3>Jobs/Services Posted</h3>
+          <p>5</p>
+        </div>
+        <div class="card" tabindex="0">
+          <h3>Applications Sent</h3>
+          <p>12</p>
+        </div>
+        <div class="card" tabindex="0">
+          <h3>Messages</h3>
+          <p>3</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    &copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh
+  </footer>
+</body>
+</html>

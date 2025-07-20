@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Logout - WorkBridge</title>
+  <style>
+    :root {
+      --light-blue: #a8c0ff;
+      --ash: #e3e6e8;
+      --white: #ffffff;
+      --dark-blue: #3357a4;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--ash);
+      color: var(--dark-blue);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    a.button {
+      background-color: var(--dark-blue);
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.75rem 2rem;
+      border-radius: 30px;
+      font-weight: 700;
+      box-shadow: 0 4px 10px rgba(51,87,164,0.4);
+      transition: background-color 0.3s ease;
+    }
+    a.button:hover,
+    a.button:focus {
+      background-color: #274a85;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>You have been logged out</h1>
+  <p>Thank you for using WorkBridge. See you again soon!</p>
+  <a href="login.html" class="button" role="button">Login Again</a>
+</body>
+</html>

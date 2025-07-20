@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WorkBridge - Connecting Bangladesh Workforce</title>
+  <style>
+    /* Color palette */
+    :root {
+      --light-blue: #a8c0ff;
+      --ash: #e3e6e8;
+      --white: #ffffff;
+      --dark-blue: #3357a4;
+      --gray-dark: #3a3a3a;
+    }
+
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--ash);
+      color: var(--gray-dark);
+      line-height: 1.6;
+    }
+
+    /* Navbar */
+    nav {
+      background-color: var(--light-blue);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    nav .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 1rem;
+    }
+
+    nav .logo {
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: var(--dark-blue);
+      letter-spacing: 2px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    nav ul li {
+      position: relative;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: var(--dark-blue);
+      font-weight: 600;
+      padding: 0.5rem 0.7rem;
+      border-radius: 5px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      display: inline-block;
+    }
+
+    nav ul li a:hover,
+    nav ul li a:focus {
+      background-color: var(--dark-blue);
+      color: var(--white);
+      outline: none;
+    }
+
+    /* Unique Nav Bar underline effect */
+    nav ul li a::after {
+      content: '';
+      display: block;
+      height: 3px;
+      background: var(--dark-blue);
+      width: 0;
+      transition: width 0.3s ease;
+      border-radius: 2px;
+      margin-top: 3px;
+    }
+
+    nav ul li a:hover::after,
+    nav ul li a:focus::after {
+      width: 100%;
+    }
+
+    /* Hero Section */
+    header.hero {
+      background: linear-gradient(135deg, var(--light-blue), var(--ash));
+      padding: 4rem 1rem;
+      text-align: center;
+    }
+
+    header.hero h1 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      color: var(--dark-blue);
+    }
+
+    header.hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      color: #444;
+    }
+
+    header.hero .btn-primary {
+      background-color: var(--dark-blue);
+      color: var(--white);
+      padding: 0.75rem 2rem;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 4px 8px rgba(51,87,164,0.4);
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    header.hero .btn-primary:hover,
+    header.hero .btn-primary:focus {
+      background-color: #274a85;
+      outline: none;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--light-blue);
+      text-align: center;
+      padding: 1rem 0;
+      color: var(--dark-blue);
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-top: 4rem;
+      user-select: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav .container {
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+      nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+      }
+      header.hero h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav role="navigation" aria-label="Primary Navigation">
+    <div class="container">
+      <div class="logo" tabindex="0">WorkBridge</div>
+      <ul>
+        <li><a href="index.html" aria-current="page">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="search.html">Find Jobs/Services</a></li>
+        <li><a href="post-job.html">Post Job/Service</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="notifications.html">Notifications</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="terms.html">Terms & Privacy</a></li>
+        <li><a href="register.html">Register</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="hero" role="banner">
+    <h1>Connecting Bangladesh’s Workforce to Opportunities</h1>
+    <p>WorkBridge is a decentralized job and service platform making informal work safer and easier to find.</p>
+    <a href="register.html" class="btn-primary" role="button">Get Started</a>
+  </header>
+
+  <footer role="contentinfo">
+    &copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh
+  </footer>
+
+</body>
+</html>

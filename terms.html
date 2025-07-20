@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Terms & Privacy Policy - WorkBridge</title>
+<style>
+  :root {
+    --light-blue: #a8c0ff;
+    --ash: #e3e6e8;
+    --white: #ffffff;
+    --dark-blue: #3357a4;
+    --gray-dark: #3a3a3a;
+  }
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--ash);
+    color: var(--gray-dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  nav {
+    background-color: var(--light-blue);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: sticky; top: 0; z-index: 1000;
+  }
+  nav .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.8rem 1rem;
+  }
+  nav .logo {
+    font-weight: 700; font-size: 1.8rem; color: var(--dark-blue);
+    letter-spacing: 2px; cursor: pointer; user-select: none;
+  }
+  nav ul {
+    list-style: none; display: flex; gap: 1.5rem;
+  }
+  nav ul li a {
+    text-decoration: none; color: var(--dark-blue);
+    font-weight: 600; padding: 0.5rem 0.7rem; border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: inline-block; position: relative;
+  }
+  nav ul li a:hover,
+  nav ul li a:focus {
+    background-color: var(--dark-blue);
+    color: var(--white);
+    outline: none;
+  }
+  nav ul li a::after {
+    content: '';
+    display: block; height: 3px;
+    background: var(--dark-blue);
+    width: 0;
+    transition: width 0.3s ease;
+    border-radius: 2px;
+    margin-top: 3px;
+  }
+  nav ul li a:hover::after,
+  nav ul li a:focus::after {
+    width: 100%;
+  }
+  nav ul li a[aria-current="page"] {
+    background-color: var(--dark-blue);
+    color: var(--white);
+    pointer-events: none;
+  }
+  main {
+    flex-grow: 1;
+    max-width: 900px;
+    margin: 2rem auto 3rem auto;
+    background-color: var(--white);
+    padding: 2rem 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    line-height: 1.6;
+    font-size: 1.1rem;
+  }
+  h1 {
+    color: var(--dark-blue);
+    font-size: 2.4rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  h2 {
+    margin-top: 1.5rem;
+    color: var(--dark-blue);
+  }
+  p {
+    margin-top: 0.6rem;
+  }
+  @media (max-width: 600px) {
+    main {
+      margin: 1.5rem 1rem 3rem 1rem;
+      padding: 1.5rem 1.5rem;
+    }
+    h1 {
+      font-size: 2rem;
+    }
+  }
+</style>
+</head>
+<body>
+  <nav role="navigation" aria-label="Primary Navigation">
+    <div class="container">
+      <div class="logo" tabindex="0">WorkBridge</div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="search.html">Find Jobs/Services</a></li>
+        <li><a href="post-job.html">Post Job/Service</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="notifications.html">Notifications</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="terms.html" aria-current="page">Terms & Privacy</a></li>
+        <li><a href="register.html">Register</a></li>
+        <li><a href="logout.html">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main role="main">
+    <h1>Terms of Service & Privacy Policy</h1>
+
+    <h2>1. Acceptance of Terms</h2>
+    <p>By using WorkBridge, you agree to abide by our terms and conditions and privacy practices. Please read them carefully before using the platform.</p>
+
+    <h2>2. User Responsibilities</h2>
+    <p>Users must provide accurate information, comply with local laws, and respect other users. Any fraudulent or abusive behavior may result in account suspension.</p>
+
+    <h2>3. Privacy</h2>
+    <p>We collect personal information to facilitate job and service connections. Your data is protected and will not be shared with third parties without your consent, except as required by law.</p>
+
+    <h2>4. Content</h2>
+    <p>Users are responsible for the content they post. WorkBridge does not guarantee the accuracy or reliability of listings or profiles.</p>
+
+    <h2>5. Limitation of Liability</h2>
+    <p>WorkBridge is a platform that connects users but is not involved in employment contracts. We are not liable for disputes, damages, or losses related to jobs or services obtained via the platform.</p>
+
+    <h2>6. Changes to Terms</h2>
+    <p>We may update these terms at any time. Continued use of WorkBridge after changes implies acceptance of the new terms.</p>
+
+    <h2>7. Contact</h2>
+    <p>If you have questions about these terms or our privacy policy, please contact us via the <a href="contact.html">Contact Us</a> page.</p>
+  </main>
+
+  <footer role="contentinfo">
+    &copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh
+  </footer>
+</body>
+</html>

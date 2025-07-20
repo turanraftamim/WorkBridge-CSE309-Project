@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Job / Service Details - WorkBridge</title>
+  <style>
+    :root {
+      --light-blue: #a8c0ff;
+      --ash: #e3e6e8;
+      --white: #ffffff;
+      --dark-blue: #3357a4;
+      --gray-dark: #3a3a3a;
+      --btn-hover: #274a85;
+    }
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--ash);
+      color: var(--gray-dark);
+      line-height: 1.6;
+    }
+    nav {
+      background-color: var(--light-blue);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky; top: 0; z-index: 1000;
+    }
+    nav .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.8rem 1rem;
+    }
+    nav .logo {
+      font-weight: 700; font-size: 1.8rem; color: var(--dark-blue);
+      letter-spacing: 2px; cursor: pointer; user-select: none;
+    }
+    nav ul {
+      list-style: none; display: flex; gap: 1.5rem;
+    }
+    nav ul li a {
+      text-decoration: none; color: var(--dark-blue);
+      font-weight: 600; padding: 0.5rem 0.7rem; border-radius: 5px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      display: inline-block; position: relative;
+    }
+    nav ul li a:hover,
+    nav ul li a:focus {
+      background-color: var(--dark-blue);
+      color: var(--white);
+      outline: none;
+    }
+    nav ul li a[aria-current="page"] {
+      background-color: var(--dark-blue);
+      color: var(--white);
+      pointer-events: none;
+    }
+    main {
+      max-width: 900px;
+      margin: 3rem auto;
+      background-color: var(--white);
+      padding: 2rem 2.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: var(--dark-blue);
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .location {
+      font-style: italic;
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+    .skills {
+      margin: 1rem 0 1.5rem 0;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--dark-blue);
+    }
+    p.description {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: #444;
+    }
+    button.btn-primary {
+      background-color: var(--dark-blue);
+      color: var(--white);
+      padding: 0.75rem 2.5rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 4px 8px rgba(51,87,164,0.4);
+      transition: background-color 0.3s ease;
+      margin-top: 2rem;
+      display: block;
+    }
+    button.btn-primary:hover,
+    button.btn-primary:focus {
+      background-color: var(--btn-hover);
+      outline: none;
+    }
+    @media (max-width: 768px) {
+      main {
+        margin: 2rem 1rem;
+        padding: 1.5rem 1.5rem;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+      button.btn-primary {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav role="navigation" aria-label="Primary Navigation">
+    <div class="container">
+      <div class="logo" tabindex="0">WorkBridge</div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="search.html" aria-current="page">Find Jobs/Services</a></li>
+        <li><a href="post-job.html">Post Job/Service</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="notifications.html">Notifications</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="terms.html" aria-current="page">Terms & Privacy</a></li>
+        <li><a href="register.html">Register</a></li>
+        <li><a href="logout.html">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main role="main">
+    <h1>Electrician Needed in Dhaka</h1>
+    <p class="location">Location: Dhaka</p>
+    <p class="skills">Required Skills: Electrical, Wiring, Maintenance</p>
+    <p class="description">
+      We are looking for an experienced electrician to fix wiring issues in our Dhaka office building. The candidate must have prior experience with commercial electrical systems, a strong work ethic, and be reliable. Job duration is expected to be 2 weeks, starting immediately.
+    </p>
+
+    <button type="button" onclick="alert('Contact details sent!');" aria-label="Contact employer about this job">Contact Employer</button>
+  </main>
+
+  <footer role="contentinfo">
+    &copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh
+  </footer>
+</body>
+</html>
