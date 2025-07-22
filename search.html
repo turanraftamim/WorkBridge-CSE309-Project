@@ -124,8 +124,7 @@
       outline: none;
       box-shadow: 0 0 5px var(--light-blue);
     }
-    button.btn-primary,
-    a.btn-primary {
+    button.btn-primary {
       background-color: var(--dark-blue);
       color: var(--white);
       border: none;
@@ -135,20 +134,13 @@
       cursor: pointer;
       box-shadow: 0 4px 8px rgba(51,87,164,0.4);
       transition: background-color 0.3s ease;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      margin-top: 0.8rem;
+      margin-top: 0.5rem;
     }
-    button.btn-primary:hover,
-    a.btn-primary:hover,
-    button.btn-primary:focus,
-    a.btn-primary:focus {
+    button.btn-primary:hover {
       background-color: var(--btn-hover);
-      outline: none;
     }
     section.results {
-      max-height: 500px;
+      max-height: 600px;
       overflow-y: auto;
       border-top: 2px solid var(--light-blue);
       padding-top: 1rem;
@@ -159,36 +151,32 @@
       padding: 1rem 1.2rem;
       margin-bottom: 1rem;
       box-shadow: 1px 2px 5px rgba(0,0,0,0.05);
-      cursor: pointer;
       transition: box-shadow 0.3s ease;
     }
-    article.job-card:hover,
-    article.job-card:focus-within {
+    article.job-card:hover {
       box-shadow: 1px 5px 12px rgba(51,87,164,0.25);
-      outline: none;
     }
     article.job-card h2 {
       color: var(--dark-blue);
       font-size: 1.3rem;
       margin-bottom: 0.4rem;
     }
-    article.job-card p {
+    .job-actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .job-actions button {
       font-size: 0.95rem;
-      margin-bottom: 0.3rem;
-      color: #555;
     }
-    article.job-card .location,
-    article.job-card .skills {
-      font-style: italic;
-      font-size: 0.9rem;
-      color: #777;
-    }
-    section.results::-webkit-scrollbar {
-      width: 8px;
-    }
-    section.results::-webkit-scrollbar-thumb {
-      background-color: var(--light-blue);
+    .skill-tags span {
+      display: inline-block;
+      background: #e3e6e8;
+      padding: 3px 7px;
       border-radius: 4px;
+      margin: 2px;
+      font-size: 0.85rem;
     }
     @media (max-width: 768px) {
       form.search-form {
@@ -233,58 +221,142 @@
   <main role="main">
     <h1>Find Jobs & Services</h1>
 
-    <form class="search-form" action="#" method="get" aria-label="Search jobs or services">
-      <input type="text" id="keyword" name="keyword" placeholder="Search by job title, service or skills" autocomplete="off" />
-      <select id="location" name="location" aria-label="Select location">
-        <option value="" selected>All Locations</option>
+    <form class="search-form">
+      <input type="text" placeholder="Search jobs..." id="search-input" />
+      <select id="location-filter">
+        <option value="">All Locations</option>
         <option value="dhaka">Dhaka</option>
         <option value="chittagong">Chittagong</option>
-        <option value="khulna">Khulna</option>
-        <option value="rajshahi">Rajshahi</option>
-        <option value="barisal">Barisal</option>
-        <option value="rangpur">Rangpur</option>
         <option value="sylhet">Sylhet</option>
+        <option value="khulna">Khulna</option>
       </select>
-      <select id="job-type" name="job-type" aria-label="Select job or service type">
-        <option value="" selected>All Types</option>
-        <option value="job">Job</option>
-        <option value="service">Service</option>
+      <select id="job-type-filter">
+        <option value="">All Types</option>
+        <option value="full-time">Full Time</option>
+        <option value="part-time">Part Time</option>
+        <option value="contract">Contract</option>
       </select>
-      <button type="submit" class="btn-primary">Search</button>
     </form>
 
-    <section class="results" tabindex="0" aria-live="polite" aria-label="Search results">
-      <!-- Job Card 1 -->
-      <article class="job-card" tabindex="0">
-        <h2>Electrician Needed</h2>
-        <p>Looking for an experienced electrician to fix wiring in Dhaka office.</p>
-        <p class="location">Location: Dhaka</p>
-        <p class="skills">Skills: Electrical, Wiring, Maintenance</p>
-        <a href="job-details.html" class="btn-primary">View Details</a>
-      </article>
-
-      <!-- Job Card 2 -->
-      <article class="job-card" tabindex="0">
-        <h2>Graphic Designer Freelancer</h2>
-        <p>Creative graphic designer wanted for logo and branding projects.</p>
-        <p class="location">Location: Chittagong</p>
-        <p class="skills">Skills: Photoshop, Illustrator, Creativity</p>
-        <a href="job-details.html" class="btn-primary">View Details</a>
-      </article>
-
-      <!-- Job Card 3 -->
-      <article class="job-card" tabindex="0">
-        <h2>Home Cleaning Service</h2>
-        <p>Reliable cleaner needed for regular house cleaning in Khulna.</p>
-        <p class="location">Location: Khulna</p>
-        <p class="skills">Skills: Cleaning, Trustworthy, Punctual</p>
-        <a href="job-details.html" class="btn-primary">View Details</a>
-      </article>
+    <section class="results" id="job-container" aria-label="Search results">
+      <!-- Jobs will be dynamically injected here -->
     </section>
   </main>
 
-  <footer role="contentinfo">
+  <footer role="contentinfo" style="text-align:center; margin: 2rem 0; font-size: 0.9rem;">
     &copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh
   </footer>
+
+  <script>
+    const jobs = [
+      {
+        id: 1,
+        title: "Electrician Needed",
+        company: "ABC Solutions",
+        location: "Mirpur, Dhaka",
+        salary: "৳800/day",
+        type: "full-time",
+        posted: "2 days ago",
+        skills: ["Wiring", "AC Repair", "Electrical Maintenance"],
+        description: "Need experienced electrician for residential building wiring. Must have own tools."
+      },
+      {
+        id: 2,
+        title: "Plumber for Apartment Complex",
+        company: "City Developers",
+        location: "Banani, Dhaka",
+        salary: "৳1,200/day",
+        type: "contract",
+        posted: "5 hours ago",
+        skills: ["Pipe Fitting", "Leak Repair", "Water Pump"],
+        description: "Immediate opening for certified plumber. 2-week contract with possible extension."
+      },
+      {
+        id: 3,
+        title: "AC Technician",
+        company: "Cool Comfort Ltd",
+        location: "Gulshan, Dhaka",
+        salary: "৳15,000/month",
+        type: "full-time",
+        posted: "1 day ago",
+        skills: ["AC Installation", "Gas Charging", "Maintenance"],
+        description: "Full-time position with benefits. Minimum 2 years experience required."
+      }
+    ];
+
+    function renderJobs(list) {
+      const container = document.getElementById('job-container');
+      container.innerHTML = '';
+
+      if (list.length === 0) {
+        container.innerHTML = '<p>No jobs match your filters. Try different criteria.</p>';
+        return;
+      }
+
+      list.forEach(job => {
+        const skillsHTML = job.skills.map(skill =>
+          `<span>${skill}</span>`
+        ).join('');
+
+        const card = document.createElement('article');
+        card.className = 'job-card';
+        card.innerHTML = `
+          <h2>${job.title}</h2>
+          <p><strong>${job.company}</strong></p>
+          <p class="location">📍 ${job.location}</p>
+          <div class="skill-tags">${skillsHTML}</div>
+          <p>${job.description}</p>
+          <p><strong>Type:</strong> ${job.type} &nbsp; | &nbsp; <strong>Salary:</strong> ${job.salary}</p>
+          <div class="job-actions">
+            <button class="btn-primary" onclick="applyToJob(${job.id})">Apply Now</button>
+            <button class="btn-primary" style="background:#fff; color:var(--dark-blue); border:1px solid var(--dark-blue);" onclick="saveJob(${job.id})">Save Job</button>
+            <button class="btn-primary" onclick="location.href='job-details.html?id=${job.id}'">View Details</button>
+          </div>
+          <small>Posted: ${job.posted}</small>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function filterJobs() {
+      const location = document.getElementById('location-filter').value.toLowerCase();
+      const type = document.getElementById('job-type-filter').value;
+      const search = document.getElementById('search-input').value.toLowerCase();
+
+      const filtered = jobs.filter(job =>
+        (location === '' || job.location.toLowerCase().includes(location)) &&
+        (type === '' || job.type === type) &&
+        (search === '' || job.title.toLowerCase().includes(search) || job.description.toLowerCase().includes(search))
+      );
+
+      renderJobs(filtered);
+    }
+
+    document.getElementById('location-filter').addEventListener('change', filterJobs);
+    document.getElementById('job-type-filter').addEventListener('change', filterJobs);
+    document.getElementById('search-input').addEventListener('input', filterJobs);
+
+    function applyToJob(id) {
+      alert(`Applying to job ID: ${id}`);
+    }
+
+    function saveJob(id) {
+      let saved = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+      if (!saved.includes(id)) {
+        saved.push(id);
+        localStorage.setItem('savedJobs', JSON.stringify(saved));
+        alert('Job saved successfully!');
+      } else {
+        alert('You already saved this job.');
+      }
+    }
+
+    window.onload = () => {
+      if (!localStorage.getItem('savedJobs')) {
+        localStorage.setItem('savedJobs', JSON.stringify([]));
+      }
+      renderJobs(jobs);
+    };
+  </script>
 </body>
 </html>
