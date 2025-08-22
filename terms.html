@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Terms & Privacy Policy - WorkBridge</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
   :root {
     --light-blue: #a8c0ff;
@@ -11,10 +12,13 @@
     --white: #ffffff;
     --dark-blue: #3357a4;
     --gray-dark: #3a3a3a;
+    --btn-hover: #274a85;
+    --sidebar-bg: #d1d9f7;
+    --success: #4caf50;
+    --warning: #ff9800;
+    --danger: #f44336;
   }
-  * {
-    margin: 0; padding: 0; box-sizing: border-box;
-  }
+  * { margin:0; padding:0; box-sizing:border-box; }
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--ash);
@@ -23,135 +27,203 @@
     display: flex;
     flex-direction: column;
   }
-  nav {
-    background-color: var(--light-blue);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    position: sticky; top: 0; z-index: 1000;
+
+  /* Header */
+  header {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background-color:var(--light-blue);
+    padding:0.8rem 1.5rem;
+    box-shadow:0 2px 5px rgba(0,0,0,0.1);
   }
-  nav .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 0.8rem 1rem;
+  header .menu-btn { font-size:1.5rem; background:none; border:none; cursor:pointer; color:var(--dark-blue); }
+  header .logo { font-weight:700; font-size:1.8rem; color:var(--dark-blue); letter-spacing:2px; cursor:pointer; display:flex; align-items:center; gap:0.5rem; }
+  .user-actions { display:flex; align-items:center; gap:1rem; }
+  .user-actions .notification-badge { position:relative; cursor:pointer; }
+  .user-actions .badge {
+    position:absolute; top:-5px; right:-5px; background-color:var(--danger); color:white;
+    border-radius:50%; width:18px; height:18px; font-size:0.7rem; display:flex; align-items:center; justify-content:center;
   }
-  nav .logo {
-    font-weight: 700; font-size: 1.8rem; color: var(--dark-blue);
-    letter-spacing: 2px; cursor: pointer; user-select: none;
+  .user-actions .profile { display:flex; align-items:center; gap:0.5rem; cursor:pointer; }
+  .user-actions .profile-img {
+    width:35px; height:35px; border-radius:50%; background-color:var(--dark-blue);
+    color:white; display:flex; align-items:center; justify-content:center; font-weight:bold;
   }
-  nav ul {
-    list-style: none; display: flex; gap: 1.5rem;
+
+  /* Sidebar */
+  .sidebar {
+    position:fixed; top:0; left:-250px; width:250px; height:100%; background-color:var(--white);
+    box-shadow:2px 0 5px rgba(0,0,0,0.2); padding:2rem 1rem; transition:left 0.3s ease; z-index:1001; overflow-y:auto;
   }
-  nav ul li a {
-    text-decoration: none; color: var(--dark-blue);
-    font-weight: 600; padding: 0.5rem 0.7rem; border-radius: 5px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    display: inline-block; position: relative;
+  .sidebar h2 { margin-bottom:1.5rem; color:var(--dark-blue); text-align:center; display:flex; align-items:center; justify-content:center; gap:0.5rem; }
+  .sidebar ul { list-style:none; }
+  .sidebar ul li { margin-bottom:1rem; }
+  .sidebar ul li a { text-decoration:none; color:var(--dark-blue); font-weight:600; display:flex; align-items:center; gap:0.5rem; padding:0.6rem 0.8rem; border-radius:5px; transition:background-color 0.3s ease, color 0.3s ease; }
+  .sidebar ul li a.active, .sidebar ul li a:hover { background-color:var(--dark-blue); color:var(--white); }
+
+  .overlay {
+    position:fixed; top:0; left:0; width:100%; height:100%;
+    background:rgba(0,0,0,0.3); display:none; z-index:100;
   }
-  nav ul li a:hover,
-  nav ul li a:focus {
-    background-color: var(--dark-blue);
-    color: var(--white);
-    outline: none;
-  }
-  nav ul li a::after {
-    content: '';
-    display: block; height: 3px;
-    background: var(--dark-blue);
-    width: 0;
-    transition: width 0.3s ease;
-    border-radius: 2px;
-    margin-top: 3px;
-  }
-  nav ul li a:hover::after,
-  nav ul li a:focus::after {
-    width: 100%;
-  }
-  nav ul li a[aria-current="page"] {
-    background-color: var(--dark-blue);
-    color: var(--white);
-    pointer-events: none;
-  }
+
+  /* Main Content */
   main {
-    flex-grow: 1;
-    max-width: 900px;
-    margin: 2rem auto 3rem auto;
-    background-color: var(--white);
-    padding: 2rem 2.5rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    line-height: 1.6;
-    font-size: 1.1rem;
+    flex-grow:1; max-width:1200px; margin:2rem auto; display:flex; gap:2rem; padding:0 1rem;
   }
-  h1 {
-    color: var(--dark-blue);
-    font-size: 2.4rem;
-    margin-bottom: 1rem;
-    text-align: center;
+  aside.dashboard-sidebar {
+    width:280px; background-color:var(--white); padding:1.5rem; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.08); height:fit-content;
   }
-  h2 {
-    margin-top: 1.5rem;
-    color: var(--dark-blue);
+  .user-profile-card { text-align:center; padding-bottom:1.5rem; margin-bottom:1.5rem; border-bottom:1px solid #eee; }
+  .user-profile-img { width:80px; height:80px; border-radius:50%; background-color:var(--dark-blue); color:white; display:flex; align-items:center; justify-content:center; font-size:2rem; font-weight:bold; margin:0 auto 1rem; }
+  .user-profile-card h3 { color:var(--dark-blue); margin-bottom:0.3rem; }
+  .user-profile-card p { color:#666; font-size:0.9rem; }
+  .profile-completion { margin:1.5rem 0; }
+  .profile-completion h4 { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; font-size:0.9rem; }
+  .progress-bar { height:8px; background-color:var(--ash); border-radius:4px; overflow:hidden; }
+  .progress-fill { height:100%; background-color:var(--success); width:75%; border-radius:4px; }
+  .sidebar-nav ul { list-style:none; }
+  .sidebar-nav li { margin-bottom:0.5rem; }
+  .sidebar-nav a { display:flex; align-items:center; gap:0.8rem; padding:0.8rem 1rem; text-decoration:none; color:var(--gray-dark); border-radius:6px; transition:all 0.3s ease; }
+  .sidebar-nav a:hover, .sidebar-nav a.active { background-color:var(--dark-blue); color:var(--white); }
+  .sidebar-nav a.active { font-weight:600; }
+  .sidebar-nav .badge { margin-left:auto; background-color:var(--danger); color:white; padding:0.2rem 0.5rem; border-radius:12px; font-size:0.75rem; }
+
+  .dashboard-content {
+    flex:1; background-color:var(--white); padding:2rem; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.08);
   }
-  p {
-    margin-top: 0.6rem;
+  .dashboard-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; }
+  .dashboard-header h2 { color:var(--dark-blue); font-size:1.8rem; }
+  .date-filter { display:flex; align-items:center; gap:0.5rem; }
+  .date-filter select { padding:0.5rem; border:1px solid #ddd; border-radius:4px; }
+
+  /* Terms & Privacy Content */
+  .terms-content h3 { margin-bottom:0.5rem; color:var(--dark-blue); }
+  .terms-content p { margin-bottom:1rem; line-height:1.6; }
+  .terms-content ol { padding-left:1.5rem; margin-bottom:1rem; }
+  .terms-content li { margin-bottom:0.6rem; }
+
+  footer {
+    text-align:center; margin:2rem 0; padding:1.5rem; background-color:var(--white); border-top:2px solid var(--light-blue); font-size:0.9rem;
   }
-  @media (max-width: 600px) {
-    main {
-      margin: 1.5rem 1rem 3rem 1rem;
-      padding: 1.5rem 1.5rem;
-    }
-    h1 {
-      font-size: 2rem;
-    }
-  }
+  .footer-links { display:flex; justify-content:center; gap:1.5rem; margin-top:1rem; }
+  .footer-links a { color:var(--dark-blue); text-decoration:none; transition:color 0.3s ease; }
+  .footer-links a:hover { color:#274a85; text-decoration:underline; }
+
+  @media (max-width:900px) { main { flex-direction:column; } aside.dashboard-sidebar { width:100%; } }
+  @media (max-width:600px) { .dashboard-header { flex-direction:column; align-items:flex-start; gap:1rem; } .user-actions .profile span { display:none; } }
 </style>
 </head>
 <body>
-  <nav role="navigation" aria-label="Primary Navigation">
-    <div class="container">
-      <div class="logo" tabindex="0">WorkBridge</div>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="search.html">Find Jobs/Services</a></li>
-        <li><a href="post-job.html">Post Job/Service</a></li>
-        <li><a href="dashboard.html">Dashboard</a></li>
-        <li><a href="notifications.html">Notifications</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="terms.html" aria-current="page">Terms & Privacy</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="logout.html">Logout</a></li>
-      </ul>
+  <!-- Header -->
+  <header>
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div class="logo"><i class="fas fa-bridge"></i> WorkBridge</div>
+    <div class="user-actions">
+      <div class="notification-badge" onclick="showNotifications()">
+        <i class="fas fa-bell"></i><span class="badge">3</span>
+      </div>
+      <div class="profile" onclick="toggleProfileMenu()">
+        <div class="profile-img">TS</div><span>Turan Smith</span><i class="fas fa-chevron-down"></i>
+      </div>
     </div>
-  </nav>
+  </header>
 
-  <main role="main">
-    <h1>Terms of Service & Privacy Policy</h1>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <h2><i class="fas fa-bars"></i> Menu</h2>
+    <ul>
+      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="search.html"><i class="fas fa-search"></i> Find Jobs/Services</a></li>
+      <li><a href="post-job.html"><i class="fas fa-bullhorn"></i> Post Job/Service</a></li>
+      <li><a href="dashboard.html"><i class="fas fa-chart-bar"></i> Dashboard</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="messages.html"><i class="fas fa-envelope"></i> Messages</a></li>
+      <li><a href="saved-jobs.html"><i class="fas fa-bookmark"></i> Saved Jobs</a></li>
+      <li><a href="applications.html"><i class="fas fa-file-alt"></i> Applications</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="terms.html" class="active"><i class="fas fa-file-contract"></i> Terms & Privacy</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
-    <h2>1. Acceptance of Terms</h2>
-    <p>By using WorkBridge, you agree to abide by our terms and conditions and privacy practices. Please read them carefully before using the platform.</p>
+  <!-- Main Content -->
+  <main>
+    <aside class="dashboard-sidebar">
+      <div class="user-profile-card">
+        <div class="user-profile-img">TS</div>
+        <h3>Turan Smith</h3>
+        <p>Premium Member</p>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li><a href="dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a></li>
+          <li><a href="my-posts.html"><i class="fas fa-bullhorn"></i> My Posts</a></li>
+          <li><a href="applications.html"><i class="fas fa-file-alt"></i> Applications</a></li>
+          <li><a href="messages.html"><i class="fas fa-envelope"></i> Messages</a></li>
+          <li><a href="saved-jobs.html"><i class="fas fa-bookmark"></i> Saved Jobs</a></li>
+          <li><a href="profile.html"><i class="fas fa-user"></i> Profile Settings</a></li>
+          <li><a href="subscription.html"><i class="fas fa-crown"></i> Subscription</a></li>
+          <li><a href="help.html"><i class="fas fa-question-circle"></i> Help & Support</a></li>
+        </ul>
+      </nav>
+    </aside>
 
-    <h2>2. User Responsibilities</h2>
-    <p>Users must provide accurate information, comply with local laws, and respect other users. Any fraudulent or abusive behavior may result in account suspension.</p>
+    <section class="dashboard-content">
+      <div class="dashboard-header">
+        <h2>Terms of Service & Privacy Policy</h2>
+      </div>
 
-    <h2>3. Privacy</h2>
-    <p>We collect personal information to facilitate job and service connections. Your data is protected and will not be shared with third parties without your consent, except as required by law.</p>
+      <div class="terms-content">
+        <h3>1. Acceptance of Terms</h3>
+        <p>By using WorkBridge, you agree to abide by our terms and conditions and privacy practices. Please read them carefully before using the platform.</p>
 
-    <h2>4. Content</h2>
-    <p>Users are responsible for the content they post. WorkBridge does not guarantee the accuracy or reliability of listings or profiles.</p>
+        <h3>2. User Responsibilities</h3>
+        <p>Users must provide accurate information, comply with local laws, and respect other users. Any fraudulent or abusive behavior may result in account suspension.</p>
 
-    <h2>5. Limitation of Liability</h2>
-    <p>WorkBridge is a platform that connects users but is not involved in employment contracts. We are not liable for disputes, damages, or losses related to jobs or services obtained via the platform.</p>
+        <h3>3. Privacy</h3>
+        <p>We collect personal information to facilitate job and service connections. Your data is protected and will not be shared with third parties without your consent, except as required by law.</p>
 
-    <h2>6. Changes to Terms</h2>
-    <p>We may update these terms at any time. Continued use of WorkBridge after changes implies acceptance of the new terms.</p>
+        <h3>4. Content</h3>
+        <p>Users are responsible for the content they post. WorkBridge does not guarantee the accuracy or reliability of listings or profiles.</p>
 
-    <h2>7. Contact</h2>
-    <p>If you have questions about these terms or our privacy policy, please contact us via the <a href="contact.html">Contact Us</a> page.</p>
+        <h3>5. Limitation of Liability</h3>
+        <p>WorkBridge is a platform that connects users but is not involved in employment contracts. We are not liable for disputes, damages, or losses related to jobs or services obtained via the platform.</p>
+
+        <h3>6. Changes to Terms</h3>
+        <p>We may update these terms at any time. Continued use of WorkBridge after changes implies acceptance of the new terms.</p>
+
+        <h3>7. Contact</h3>
+        <p>If you have questions about these terms or our privacy policy, please contact us via the <a href="contact.html">Contact Us</a> page.</p>
+      </div>
+    </section>
   </main>
 
-  <footer role="contentinfo">
-    &copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh
+  <footer>
+    <p>&copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh</p>
+    <div class="footer-links">
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact</a>
+      <a href="terms.html">Terms & Privacy</a>
+      <a href="help.html">Help Center</a>
+    </div>
   </footer>
+
+  <script>
+    function toggleMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      if(sidebar.style.left === '0px') { sidebar.style.left='-250px'; overlay.style.display='none'; }
+      else { sidebar.style.left='0px'; overlay.style.display='block'; }
+    }
+    function toggleProfileMenu() { console.log("Profile menu toggled"); }
+    function showNotifications() { console.log("Notifications shown"); }
+  </script>
 </body>
 </html>
