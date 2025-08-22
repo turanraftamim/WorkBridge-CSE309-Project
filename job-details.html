@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Job / Service Details - WorkBridge</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --light-blue: #a8c0ff;
@@ -12,6 +13,10 @@
       --dark-blue: #3357a4;
       --gray-dark: #3a3a3a;
       --btn-hover: #274a85;
+      --success: #4caf50;
+      --warning: #ff9800;
+      --danger: #f44336;
+      --info: #2196f3;
     }
     * {
       margin: 0; padding: 0; box-sizing: border-box;
@@ -21,137 +26,991 @@
       background-color: var(--ash);
       color: var(--gray-dark);
       line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
-    nav {
-      background-color: var(--light-blue);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      position: sticky; top: 0; z-index: 1000;
+    
+    /* Header */
+    header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:sticky;
+      top:0;
+      z-index:1000;
+      background-color:var(--light-blue);
+      padding:0.8rem 1.5rem;
+      box-shadow:0 2px 5px rgba(0,0,0,0.1);
     }
-    nav .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 0.8rem 1rem;
+
+    header .menu-btn {
+      font-size:1.5rem;
+      background:none;
+      border:none;
+      cursor:pointer;
+      color:var(--dark-blue);
     }
-    nav .logo {
-      font-weight: 700; font-size: 1.8rem; color: var(--dark-blue);
-      letter-spacing: 2px; cursor: pointer; user-select: none;
+
+    header .logo {
+      font-weight:700;
+      font-size:1.8rem;
+      color:var(--dark-blue);
+      letter-spacing:2px;
+      cursor:pointer;
+      user-select:none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-    nav ul {
-      list-style: none; display: flex; gap: 1.5rem;
+
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
-    nav ul li a {
-      text-decoration: none; color: var(--dark-blue);
-      font-weight: 600; padding: 0.5rem 0.7rem; border-radius: 5px;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      display: inline-block; position: relative;
+
+    .user-actions .notification-badge {
+      position: relative;
+      cursor: pointer;
     }
-    nav ul li a:hover,
-    nav ul li a:focus {
+
+    .user-actions .badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: var(--danger);
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .user-actions .profile {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .user-actions .profile-img {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
       background-color: var(--dark-blue);
-      color: var(--white);
-      outline: none;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
     }
-    nav ul li a[aria-current="page"] {
-      background-color: var(--dark-blue);
-      color: var(--white);
-      pointer-events: none;
+    
+    /* Sidebar */
+    .sidebar {
+      position:fixed;
+      top:0;
+      left:-250px;
+      width:250px;
+      height:100%;
+      background-color:var(--white);
+      box-shadow:2px 0 5px rgba(0,0,0,0.2);
+      padding:2rem 1rem;
+      transition:left 0.3s ease;
+      z-index:1001;
+      overflow-y:auto;
     }
+
+    .sidebar h2 {
+      margin-bottom:1.5rem;
+      color:var(--dark-blue);
+      text-align:center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar ul { list-style:none; }
+    .sidebar ul li { margin-bottom:1rem; }
+    .sidebar ul li a {
+      text-decoration:none;
+      color:var(--dark-blue);
+      font-weight:600;
+      display:flex;
+      align-items:center;
+      gap:0.5rem;
+      padding:0.6rem 0.8rem;
+      border-radius:5px;
+      transition:background-color 0.3s ease, color 0.3s ease;
+    }
+    .sidebar ul li a.active,
+    .sidebar ul li a:hover { background-color:var(--dark-blue); color:var(--white); }
+
+    .overlay {
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.3);
+      display:none;
+      z-index:100;
+    }
+    
+    /* Main Content */
     main {
-      max-width: 900px;
-      margin: 3rem auto;
-      background-color: var(--white);
-      padding: 2rem 2.5rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      flex-grow: 1;
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 1rem;
     }
-    h1 {
-      color: var(--dark-blue);
-      font-size: 2.2rem;
+    
+    .job-details-container {
+      background-color: var(--white);
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    
+    .job-header {
+      padding: 2rem;
+      background: linear-gradient(135deg, var(--light-blue), var(--dark-blue));
+      color: white;
+    }
+    
+    .job-title-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    
+    .job-title {
+      font-size: 2rem;
       margin-bottom: 0.5rem;
     }
-    .location {
-      font-style: italic;
-      font-size: 1rem;
-      color: #666;
-      margin-bottom: 1.5rem;
-    }
-    .skills {
-      margin: 1rem 0 1.5rem 0;
-      font-size: 1.05rem;
+    
+    .job-type-badge {
+      background-color: white;
+      color: var(--dark-blue);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
       font-weight: 600;
+    }
+    
+    .job-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .job-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .btn {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background-color: white;
       color: var(--dark-blue);
     }
-    p.description {
-      font-size: 1.1rem;
-      line-height: 1.5;
-      color: #444;
+    
+    .btn-primary:hover {
+      background-color: rgba(255, 255, 255, 0.9);
     }
-    button.btn-primary {
+    
+    .btn-secondary {
+      background-color: transparent;
+      border: 1px solid white;
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .job-body {
+      padding: 2rem;
+    }
+    
+    .job-section {
+      margin-bottom: 2rem;
+    }
+    
+    .job-section h3 {
+      color: var(--dark-blue);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--light-blue);
+    }
+    
+    .job-description {
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin: 1rem 0;
+    }
+    
+    .skill-tag {
+      background-color: var(--light-blue);
+      color: var(--dark-blue);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    
+    .detail-card {
+      background-color: var(--ash);
+      padding: 1.2rem;
+      border-radius: 8px;
+    }
+    
+    .detail-card h4 {
+      color: var(--dark-blue);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .employer-section {
+      background-color: var(--ash);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+    }
+    
+    .employer-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .employer-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
       background-color: var(--dark-blue);
-      color: var(--white);
-      padding: 0.75rem 2.5rem;
-      font-size: 1.2rem;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    
+    .employer-info h3 {
+      color: var(--dark-blue);
+      margin-bottom: 0.3rem;
+    }
+    
+    .employer-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .employer-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .employer-stat {
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 1.5rem;
       font-weight: 700;
-      box-shadow: 0 4px 8px rgba(51,87,164,0.4);
+      color: var(--dark-blue);
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .similar-jobs {
+      margin-top: 3rem;
+    }
+    
+    .similar-jobs h2 {
+      color: var(--dark-blue);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--light-blue);
+    }
+    
+    .jobs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .job-card {
+      background-color: var(--white);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .job-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .job-card-header {
+      padding: 1.2rem;
+      background-color: var(--light-blue);
+    }
+    
+    .job-card-title {
+      color: var(--dark-blue);
+      margin-bottom: 0.5rem;
+    }
+    
+    .job-card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .job-card-type {
+      background-color: var(--dark-blue);
+      color: white;
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+    }
+    
+    .job-card-body {
+      padding: 1.2rem;
+    }
+    
+    .job-card-location {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #666;
+      margin-bottom: 0.8rem;
+    }
+    
+    .job-card-skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0.8rem 0;
+    }
+    
+    .job-card-skill {
+      background-color: var(--ash);
+      color: var(--dark-blue);
+      padding: 0.3rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+    }
+    
+    .job-card-footer {
+      padding: 1rem 1.2rem;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .job-card-price {
+      font-weight: 700;
+      color: var(--dark-blue);
+    }
+    
+    .job-card-apply {
+      background-color: var(--dark-blue);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
       transition: background-color 0.3s ease;
-      margin-top: 2rem;
-      display: block;
     }
-    button.btn-primary:hover,
-    button.btn-primary:focus {
+    
+    .job-card-apply:hover {
       background-color: var(--btn-hover);
-      outline: none;
     }
+    
+    footer {
+      text-align: center;
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background-color: var(--white);
+      border-top: 2px solid var(--light-blue);
+      font-size: 0.9rem;
+    }
+    
+    footer p {
+      margin-bottom: 0.5rem;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    
+    .footer-links a {
+      color: var(--dark-blue);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+      color: #274a85;
+      text-decoration: underline;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-content {
+      background-color: var(--white);
+      padding: 2rem;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .modal-header h2 {
+      color: var(--dark-blue);
+    }
+    
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #777;
+    }
+    
+    .modal-body {
+      margin-bottom: 1.5rem;
+    }
+    
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+    
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--success);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 5px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 1000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .toast.error {
+      background-color: var(--danger);
+    }
+    
+    @media (max-width: 900px) {
+      .job-title-section {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .jobs-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
     @media (max-width: 768px) {
-      main {
-        margin: 2rem 1rem;
-        padding: 1.5rem 1.5rem;
+      .job-header {
+        padding: 1.5rem;
       }
-      h1 {
-        font-size: 1.8rem;
+      
+      .job-body {
+        padding: 1.5rem;
       }
-      button.btn-primary {
-        width: 100%;
+      
+      .job-meta {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .job-actions {
+        flex-direction: column;
+      }
+      
+      .employer-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .employer-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .user-actions .profile span {
+        display: none;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      header {
+        padding: 0.8rem;
+      }
+      
+      header .logo {
+        font-size: 1.5rem;
+      }
+      
+      .job-title {
+        font-size: 1.6rem;
       }
     }
   </style>
 </head>
 <body>
-  <nav role="navigation" aria-label="Primary Navigation">
-    <div class="container">
-      <div class="logo" tabindex="0">WorkBridge</div>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="search.html" aria-current="page">Find Jobs/Services</a></li>
-        <li><a href="post-job.html">Post Job/Service</a></li>
-        <li><a href="dashboard.html">Dashboard</a></li>
-        <li><a href="notifications.html">Notifications</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="terms.html" aria-current="page">Terms & Privacy</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="logout.html">Logout</a></li>
-      </ul>
+  <!-- Header -->
+  <header>
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div class="logo">
+      <i class="fas fa-bridge"></i> WorkBridge
     </div>
-  </nav>
+    <div class="user-actions">
+      <div class="notification-badge" onclick="showNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="badge">3</span>
+      </div>
+      <div class="profile" onclick="toggleProfileMenu()">
+        <div class="profile-img">TS</div>
+        <span>Turan Smith</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </header>
 
-  <main role="main">
-    <h1>Electrician Needed in Dhaka</h1>
-    <p class="location">Location: Dhaka</p>
-    <p class="skills">Required Skills: Electrical, Wiring, Maintenance</p>
-    <p class="description">
-      We are looking for an experienced electrician to fix wiring issues in our Dhaka office building. The candidate must have prior experience with commercial electrical systems, a strong work ethic, and be reliable. Job duration is expected to be 2 weeks, starting immediately.
-    </p>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <h2><i class="fas fa-bars"></i> Menu</h2>
+    <ul>
+      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="search.html" class="active"><i class="fas fa-search"></i> Find Jobs/Services</a></li>
+      <li><a href="post-job.html"><i class="fas fa-bullhorn"></i> Post Job/Service</a></li>
+      <li><a href="dashboard.html"><i class="fas fa-chart-bar"></i> Dashboard</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="messages.html"><i class="fas fa-envelope"></i> Messages</a></li>
+      <li><a href="saved-jobs.html"><i class="fas fa-bookmark"></i> Saved Jobs</a></li>
+      <li><a href="applications.html"><i class="fas fa-file-alt"></i> Applications</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="terms.html"><i class="fas fa-file-contract"></i> Terms & Privacy</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="login.html" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
-    <button type="button" onclick="alert('Contact details sent!');" aria-label="Contact employer about this job">Contact Employer</button>
+  <!-- Main Content -->
+  <main>
+    <div class="job-details-container">
+      <div class="job-header">
+        <div class="job-title-section">
+          <div>
+            <h1 class="job-title">Electrician Needed in Dhaka</h1>
+            <div class="job-meta">
+              <div class="meta-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Dhaka, Bangladesh</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-clock"></i>
+                <span>Posted 2 days ago</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-eye"></i>
+                <span>245 views</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-users"></i>
+                <span>15 applications</span>
+              </div>
+            </div>
+          </div>
+          <span class="job-type-badge">Job</span>
+        </div>
+        
+        <div class="job-actions">
+          <button class="btn btn-primary" onclick="applyForJob()">
+            <i class="fas fa-paper-plane"></i> Apply Now
+          </button>
+          <button class="btn btn-secondary" onclick="saveJob()">
+            <i class="far fa-bookmark"></i> Save Job
+          </button>
+        </div>
+      </div>
+      
+      <div class="job-body">
+        <div class="job-section">
+          <h3>Job Description</h3>
+          <p class="job-description">
+            We are looking for an experienced electrician to fix wiring issues in our Dhaka office building. The candidate must have prior experience with commercial electrical systems, a strong work ethic, and be reliable. Job duration is expected to be 2 weeks, starting immediately.
+          </p>
+          <p class="job-description">
+            The ideal candidate will have at least 3 years of professional experience, relevant certifications, and be able to work independently with minimal supervision. Knowledge of local electrical codes and safety standards is required.
+          </p>
+        </div>
+        
+        <div class="job-section">
+          <h3>Required Skills</h3>
+          <div class="skills-list">
+            <span class="skill-tag">Electrical</span>
+            <span class="skill-tag">Wiring</span>
+            <span class="skill-tag">Maintenance</span>
+            <span class="skill-tag">Troubleshooting</span>
+            <span class="skill-tag">Safety Procedures</span>
+          </div>
+        </div>
+        
+        <div class="job-section">
+          <h3>Job Details</h3>
+          <div class="details-grid">
+            <div class="detail-card">
+              <h4><i class="fas fa-money-bill-wave"></i> Budget</h4>
+              <p>৳15,000 - ৳20,000</p>
+            </div>
+            <div class="detail-card">
+              <h4><i class="fas fa-briefcase"></i> Job Type</h4>
+              <p>Contract (2 weeks)</p>
+            </div>
+            <div class="detail-card">
+              <h4><i class="fas fa-calendar"></i> Duration</h4>
+              <p>2 weeks</p>
+            </div>
+            <div class="detail-card">
+              <h4><i class="fas fa-tachometer-alt"></i> Experience Level</h4>
+              <p>Intermediate</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="employer-section">
+          <div class="employer-header">
+            <div class="employer-avatar">BC</div>
+            <div class="employer-info">
+              <h3>Building Solutions Co.</h3>
+              <div class="employer-rating">
+                <div class="stars">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                </div>
+                <span>4.5 (28 reviews)</span>
+              </div>
+            </div>
+          </div>
+          
+          <p>Building Solutions Co. has been providing quality construction and maintenance services in Dhaka for over 10 years. We specialize in commercial building maintenance and renovations.</p>
+          
+          <div class="employer-stats">
+            <div class="employer-stat">
+              <div class="stat-value">92%</div>
+              <div class="stat-label">Hire Rate</div>
+            </div>
+            <div class="employer-stat">
+              <div class="stat-value">48</div>
+              <div class="stat-label">Jobs Posted</div>
+            </div>
+            <div class="employer-stat">
+              <div class="stat-value">4.2</div>
+              <div class="stat-label">Avg. Rating</div>
+            </div>
+            <div class="employer-stat">
+              <div class="stat-value">3</div>
+              <div class="stat-label">Active Jobs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="similar-jobs">
+      <h2>Similar Jobs</h2>
+      <div class="jobs-grid">
+        <div class="job-card">
+          <div class="job-card-header">
+            <h3 class="job-card-title">Electrical Maintenance Technician</h3>
+            <div class="job-card-meta">
+              <span><i class="fas fa-map-marker-alt"></i> Chittagong</span>
+              <span class="job-card-type">Job</span>
+            </div>
+          </div>
+          <div class="job-card-body">
+            <div class="job-card-location">
+              <i class="fas fa-building"></i>
+              <span>Industrial Solutions Ltd.</span>
+            </div>
+            <p>Looking for an experienced electrical technician for maintenance work in industrial settings.</p>
+            <div class="job-card-skills">
+              <span class="job-card-skill">Electrical</span>
+              <span class="job-card-skill">Maintenance</span>
+              <span class="job-card-skill">Industrial</span>
+            </div>
+          </div>
+          <div class="job-card-footer">
+            <div class="job-card-price">৳18,000 - ৳25,000</div>
+            <button class="job-card-apply">Apply</button>
+          </div>
+        </div>
+        
+        <div class="job-card">
+          <div class="job-card-header">
+            <h3 class="job-card-title">Residential Electrician</h3>
+            <div class="job-card-meta">
+              <span><i class="fas fa-map-marker-alt"></i> Dhaka</span>
+              <span class="job-card-type">Job</span>
+            </div>
+          </div>
+          <div class="job-card-body">
+            <div class="job-card-location">
+              <i class="fas fa-building"></i>
+              <span>Home Services Co.</span>
+            </div>
+            <p>Experienced electrician needed for residential wiring and electrical system installations.</p>
+            <div class="job-card-skills">
+              <span class="job-card-skill">Wiring</span>
+              <span class="job-card-skill">Residential</span>
+              <span class="job-card-skill">Installation</span>
+            </div>
+          </div>
+          <div class="job-card-footer">
+            <div class="job-card-price">৳12,000 - ৳18,000</div>
+            <button class="job-card-apply">Apply</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 
-  <footer role="contentinfo">
-    &copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh
+  <!-- Apply Modal -->
+  <div class="modal" id="apply-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Apply for this Job</h2>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>You are applying for: <strong>Electrician Needed in Dhaka</strong></p>
+        <p>Your profile will be shared with the employer: <strong>Building Solutions Co.</strong></p>
+        <div style="margin-top: 1.5rem;">
+          <label for="cover-letter">Cover Letter (optional):</label>
+          <textarea id="cover-letter" rows="4" style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('apply-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="submitApplication()">Submit Application</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh</p>
+    <div class="footer-links">
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact</a>
+      <a href="terms.html">Terms & Privacy</a>
+      <a href="help.html">Help Center</a>
+    </div>
   </footer>
+
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toast-message">Application submitted successfully!</span>
+  </div>
+
+  <script>
+    // DOM Elements
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const toast = document.getElementById('toast');
+    const applyModal = document.getElementById('apply-modal');
+    const closeModalButtons = document.querySelectorAll('.close-modal');
+    const logoutLink = document.getElementById('logout-link');
+    
+    // Toggle sidebar menu
+    function toggleMenu() {
+      if (sidebar.style.left === '0px') {
+        sidebar.style.left = '-250px';
+        overlay.style.display = 'none';
+      } else {
+        sidebar.style.left = '0px';
+        overlay.style.display = 'block';
+      }
+    }
+    
+    // Show notifications
+    function showNotifications() {
+      showToast('Redirecting to notifications');
+      setTimeout(() => {
+        window.location.href = 'notifications.html';
+      }, 1000);
+    }
+    
+    // Toggle profile menu (would be implemented with a dropdown)
+    function toggleProfileMenu() {
+      showToast('Profile menu would open here');
+    }
+    
+    // Show toast notification
+    function showToast(message, isError = false) {
+      const toastMessage = document.getElementById('toast-message');
+      toastMessage.textContent = message;
+      
+      if (isError) {
+        toast.classList.add('error');
+      } else {
+        toast.classList.remove('error');
+      }
+      
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+    
+    // Open modal
+    function openModal(modalId) {
+      document.getElementById(modalId).style.display = 'flex';
+    }
+    
+    // Close modal
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
+    
+    // Apply for job
+    function applyForJob() {
+      openModal('apply-modal');
+    }
+    
+    // Submit application
+    function submitApplication() {
+      closeModal('apply-modal');
+      showToast('Application submitted successfully!');
+    }
+    
+    // Save job
+    function saveJob() {
+      showToast('Job saved to your favorites');
+    }
+    
+    // Close modal when clicking on close button
+    closeModalButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        this.closest('.modal').style.display = 'none';
+      });
+    });
+    
+    // Close modal if clicked outside
+    window.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal')) {
+        e.target.style.display = 'none';
+      }
+    });
+    
+    // Handle logout
+    logoutLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      showToast('You have been logged out successfully');
+      // In a real app, this would redirect to login page after a delay
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 1500);
+    });
+  </script>
 </body>
 </html>
