@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Find Jobs & Services - WorkBridge</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --light-blue: #a8c0ff;
@@ -12,350 +13,991 @@
       --dark-blue: #3357a4;
       --gray-dark: #3a3a3a;
       --btn-hover: #274a85;
+      --success: #4caf50;
+      --warning: #ff9800;
+      --danger: #f44336;
     }
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color:var(--ash); color:var(--gray-dark); line-height:1.6; }
+
+    /* Header */
+    header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:sticky;
+      top:0;
+      z-index:1000;
+      background-color:var(--light-blue);
+      padding:0.8rem 1.5rem;
+      box-shadow:0 2px 5px rgba(0,0,0,0.1);
     }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--ash);
-      color: var(--gray-dark);
-      line-height: 1.6;
+
+    header .menu-btn {
+      font-size:1.5rem;
+      background:none;
+      border:none;
+      cursor:pointer;
+      color:var(--dark-blue);
     }
-    nav {
+
+    header .logo {
+      font-weight:700;
+      font-size:1.8rem;
+      color:var(--dark-blue);
+      letter-spacing:2px;
+      cursor:pointer;
+      user-select:none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-actions .notification-badge {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .user-actions .badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: var(--danger);
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .user-actions .profile {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .user-actions .profile-img {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background-color: var(--dark-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position:fixed;
+      top:0;
+      left:-250px;
+      width:250px;
+      height:100%;
+      background-color:var(--white);
+      box-shadow:2px 0 5px rgba(0,0,0,0.2);
+      padding:2rem 1rem;
+      transition:left 0.3s ease;
+      z-index:1001;
+      overflow-y:auto;
+    }
+
+    .sidebar h2 {
+      margin-bottom:1.5rem;
+      color:var(--dark-blue);
+      text-align:center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar ul { list-style:none; }
+    .sidebar ul li { margin-bottom:1rem; }
+    .sidebar ul li a {
+      text-decoration:none;
+      color:var(--dark-blue);
+      font-weight:600;
+      display:flex;
+      align-items:center;
+      gap:0.5rem;
+      padding:0.6rem 0.8rem;
+      border-radius:5px;
+      transition:background-color 0.3s ease, color 0.3s ease;
+    }
+    .sidebar ul li a.active,
+    .sidebar ul li a:hover { background-color:var(--dark-blue); color:var(--white); }
+
+    .overlay {
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.3);
+      display:none;
+      z-index:100;
+    }
+
+    .main-container {
+      transition:margin-left 0.3s ease;
+      padding:2rem 1.5rem;
+      max-width:1200px;
+      margin:0 auto;
+    }
+
+    h1 { text-align:center; color:var(--dark-blue); margin-bottom:1.5rem; font-size:2.2rem; }
+
+    .search-container {
+      background-color: var(--white);
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      margin-bottom: 2rem;
+    }
+
+    form.search-form {
+      display:flex;
+      gap:1rem;
+      flex-wrap:wrap;
+      margin-bottom:1rem;
+      justify-content:center;
+    }
+    
+    .search-input-container {
+      position: relative;
+      flex: 1;
+      min-width: 250px;
+    }
+    
+    .search-input-container i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #777;
+    }
+    
+    input[type="text"], select {
+      padding:0.6rem 1rem 0.6rem 2.5rem;
+      font-size:1rem;
+      border:1.5px solid #bbb;
+      border-radius:5px;
+      width: 100%;
+      transition:border-color 0.3s ease;
+    }
+    input[type="text"]:focus, select:focus { border-color:var(--dark-blue); outline:none; box-shadow:0 0 5px var(--light-blue); }
+
+    button.btn-primary {
+      background-color:var(--dark-blue);
+      color:var(--white);
+      border:none;
+      padding:0.75rem 2rem;
+      border-radius:30px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:0 4px 8px rgba(51,87,164,0.4);
+      transition:background-color 0.3s ease, transform 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    button.btn-primary:hover { background-color:var(--btn-hover); transform: translateY(-2px); }
+    
+    button.btn-secondary {
+      background-color: var(--white);
+      color: var(--dark-blue);
+      border: 1px solid var(--dark-blue);
+      padding: 0.6rem 1.5rem;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    button.btn-secondary:hover {
       background-color: var(--light-blue);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
     }
-    nav .container {
-      max-width: 1200px;
-      margin: 0 auto;
+
+    .filter-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .filter-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .filter-tag {
+      background-color: var(--light-blue);
+      color: var(--dark-blue);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    
+    .filter-tag .close {
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    section.results { 
+      max-height:700px; 
+      overflow-y:auto; 
+      border-top:2px solid var(--light-blue); 
+      padding-top:1rem; 
+    }
+    
+    .results-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.8rem 1rem;
+      margin-bottom: 1rem;
     }
-    nav .logo {
-      font-weight: 700;
-      font-size: 1.8rem;
-      color: var(--dark-blue);
-      letter-spacing: 2px;
-      cursor: pointer;
-      user-select: none;
-    }
-    nav ul {
-      list-style: none;
+    
+    .sort-options {
       display: flex;
-      gap: 1.5rem;
+      align-items: center;
+      gap: 0.5rem;
     }
-    nav ul li a {
-      text-decoration: none;
-      color: var(--dark-blue);
-      font-weight: 600;
-      padding: 0.5rem 0.7rem;
-      border-radius: 5px;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      display: inline-block;
+
+    article.job-card {
+      border:1px solid #ccc;
+      border-radius:7px;
+      padding:1.2rem 1.5rem;
+      margin-bottom:1rem;
+      background-color: var(--white);
+      box-shadow:1px 2px 5px rgba(0,0,0,0.05);
+      transition:box-shadow 0.3s ease, transform 0.2s ease;
       position: relative;
     }
-    nav ul li a:hover,
-    nav ul li a:focus {
-      background-color: var(--dark-blue);
-      color: var(--white);
-      outline: none;
+    article.job-card:hover { 
+      box-shadow:1px 5px 12px rgba(51,87,164,0.25); 
+      transform: translateY(-3px);
     }
-    nav ul li a::after {
-      content: '';
-      display: block;
-      height: 3px;
-      background: var(--dark-blue);
-      width: 0;
-      transition: width 0.3s ease;
-      border-radius: 2px;
-      margin-top: 3px;
+    
+    .job-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.5rem;
     }
-    nav ul li a:hover::after,
-    nav ul li a:focus::after {
-      width: 100%;
+    
+    .job-card-company {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
     }
-    nav ul li a[aria-current="page"] {
-      background-color: var(--dark-blue);
-      color: var(--white);
-      pointer-events: none;
-    }
-    main {
-      max-width: 1100px;
-      margin: 3rem auto;
-      background-color: var(--white);
-      padding: 2rem 2.5rem;
+    
+    .company-logo {
+      width: 50px;
+      height: 50px;
       border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    h1 {
-      color: var(--dark-blue);
-      font-size: 2.2rem;
-      margin-bottom: 1.5rem;
-      text-align: center;
-    }
-    form.search-form {
+      background-color: var(--light-blue);
       display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
+      align-items: center;
       justify-content: center;
-    }
-    input[type="text"],
-    select {
-      padding: 0.6rem 1rem;
-      font-size: 1rem;
-      border: 1.5px solid #bbb;
-      border-radius: 5px;
-      min-width: 200px;
-      max-width: 320px;
-      transition: border-color 0.3s ease;
-    }
-    input[type="text"]:focus,
-    select:focus {
-      border-color: var(--dark-blue);
-      outline: none;
-      box-shadow: 0 0 5px var(--light-blue);
-    }
-    button.btn-primary {
-      background-color: var(--dark-blue);
-      color: var(--white);
-      border: none;
-      padding: 0.75rem 2rem;
-      border-radius: 30px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 4px 8px rgba(51,87,164,0.4);
-      transition: background-color 0.3s ease;
-      margin-top: 0.5rem;
-    }
-    button.btn-primary:hover {
-      background-color: var(--btn-hover);
-    }
-    section.results {
-      max-height: 600px;
-      overflow-y: auto;
-      border-top: 2px solid var(--light-blue);
-      padding-top: 1rem;
-    }
-    article.job-card {
-      border: 1px solid #ccc;
-      border-radius: 7px;
-      padding: 1rem 1.2rem;
-      margin-bottom: 1rem;
-      box-shadow: 1px 2px 5px rgba(0,0,0,0.05);
-      transition: box-shadow 0.3s ease;
-    }
-    article.job-card:hover {
-      box-shadow: 1px 5px 12px rgba(51,87,164,0.25);
-    }
-    article.job-card h2 {
       color: var(--dark-blue);
-      font-size: 1.3rem;
-      margin-bottom: 0.4rem;
+      font-weight: bold;
+      font-size: 1.2rem;
     }
-    .job-actions {
-      margin-top: 10px;
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    .job-actions button {
-      font-size: 0.95rem;
-    }
-    .skill-tags span {
-      display: inline-block;
-      background: #e3e6e8;
-      padding: 3px 7px;
+    
+    .job-card-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background-color: var(--success);
+      color: white;
+      padding: 0.3rem 0.7rem;
       border-radius: 4px;
-      margin: 2px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
+      font-weight: 600;
     }
-    @media (max-width: 768px) {
-      form.search-form {
+    
+    article.job-card h2 { 
+      color:var(--dark-blue); 
+      font-size:1.3rem; 
+      margin-bottom:0.4rem; 
+    }
+    
+    .job-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 0.8rem 0;
+    }
+    
+    .job-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.9rem;
+    }
+    
+    .skill-tags { 
+      margin: 0.8rem 0; 
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .skill-tags span { 
+      display:inline-block;
+      background:#e3e6e8; 
+      padding:5px 10px; 
+      border-radius:4px; 
+      font-size:0.85rem; 
+    }
+    
+    .job-description {
+      margin: 0.8rem 0;
+      line-height: 1.5;
+    }
+    
+    .job-description .read-more {
+      color: var(--dark-blue);
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.3rem;
+      display: inline-block;
+    }
+    
+    .job-actions { 
+      margin-top:15px; 
+      display:flex; 
+      gap:1rem; 
+      flex-wrap:wrap; 
+    }
+    
+    .job-actions button { 
+      font-size:0.95rem; 
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+      gap: 0.5rem;
+    }
+    
+    .pagination button {
+      padding: 0.5rem 1rem;
+      border: 1px solid #ccc;
+      background-color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .pagination button.active {
+      background-color: var(--dark-blue);
+      color: white;
+      border-color: var(--dark-blue);
+    }
+    
+    .pagination button:hover:not(.active) {
+      background-color: var(--light-blue);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--success);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 5px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 1000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .toast.error {
+      background-color: var(--danger);
+    }
+
+    footer {
+      text-align:center; 
+      margin:2rem 0; 
+      font-size:0.9rem;
+      padding: 1.5rem;
+      background-color: var(--white);
+      border-top: 2px solid var(--light-blue);
+    }
+
+    @media(max-width:768px){
+      header {
+        padding: 0.8rem 1rem;
+      }
+      
+      .user-actions .profile span {
+        display: none;
+      }
+      
+      .main-container{
+        padding:1.5rem 1rem;
+      }
+      
+      h1{
+        font-size:1.8rem;
+      }
+      
+      form.search-form{
+        flex-direction:column; 
+        align-items:stretch;
+      }
+      
+      .search-input-container {
+        min-width: 100%;
+      }
+      
+      input[type="text"], select, button.btn-primary{
+        width:100%;
+      }
+      
+      .job-card-header {
         flex-direction: column;
-        align-items: center;
+        gap: 0.8rem;
       }
-      input[type="text"],
-      select,
-      button.btn-primary {
-        max-width: 100%;
+      
+      .job-card-badge {
+        position: static;
+        align-self: flex-start;
+      }
+      
+      .job-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .job-actions {
+        flex-direction: column;
+      }
+      
+      .job-actions button {
         width: 100%;
-      }
-      main {
-        margin: 2rem 1rem;
-        padding: 1.5rem 1.5rem;
-      }
-      h1 {
-        font-size: 1.8rem;
+        justify-content: center;
       }
     }
   </style>
 </head>
 <body>
-  <nav role="navigation" aria-label="Primary Navigation">
-    <div class="container">
-      <div class="logo" tabindex="0">WorkBridge</div>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="search.html" aria-current="page">Find Jobs/Services</a></li>
-        <li><a href="post-job.html">Post Job/Service</a></li>
-        <li><a href="dashboard.html">Dashboard</a></li>
-        <li><a href="notifications.html">Notifications</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="terms.html">Terms & Privacy</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="logout.html">Logout</a></li>
-      </ul>
+  <!-- Header -->
+  <header>
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div class="logo">
+      <i class="fas fa-bridge"></i> WorkBridge
     </div>
-  </nav>
+    <div class="user-actions">
+      <div class="notification-badge" onclick="showNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="badge">3</span>
+      </div>
+      <div class="profile" onclick="toggleProfileMenu()">
+        <div class="profile-img">JS</div>
+        <span>John Smith</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </header>
 
-  <main role="main">
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <h2><i class="fas fa-bars"></i> Menu</h2>
+    <ul>
+      <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="search.html"><i class="fas fa-search"></i> Find Jobs/Services</a></li>
+      <li><a href="post-job.html"><i class="fas fa-bullhorn"></i> Post Job/Service</a></li>
+      <li><a href="dashboard.html"><i class="fas fa-chart-bar"></i> Dashboard</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="messages.html"><i class="fas fa-envelope"></i> Messages</a></li>
+      <li><a href="saved-jobs.html"><i class="fas fa-bookmark"></i> Saved Jobs</a></li>
+      <li><a href="applications.html"><i class="fas fa-file-alt"></i> Applications</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="terms.html"><i class="fas fa-file-contract"></i> Terms & Privacy</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="login.html" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+  <!-- Main Content -->
+  <div class="main-container">
     <h1>Find Jobs & Services</h1>
-
-    <form class="search-form">
-      <input type="text" placeholder="Search jobs..." id="search-input" />
-      <select id="location-filter">
-        <option value="">All Locations</option>
-        <option value="dhaka">Dhaka</option>
-        <option value="chittagong">Chittagong</option>
-        <option value="sylhet">Sylhet</option>
-        <option value="khulna">Khulna</option>
-      </select>
-      <select id="job-type-filter">
-        <option value="">All Types</option>
-        <option value="full-time">Full Time</option>
-        <option value="part-time">Part Time</option>
-        <option value="contract">Contract</option>
-      </select>
-    </form>
-
+    
+    <div class="search-container">
+      <form class="search-form" id="search-form">
+        <div class="search-input-container">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search jobs, services, or skills..." id="search-input" />
+        </div>
+        <select id="location-filter">
+          <option value="">All Locations</option>
+          <option value="dhaka">Dhaka</option>
+          <option value="chittagong">Chittagong</option>
+          <option value="sylhet">Sylhet</option>
+          <option value="khulna">Khulna</option>
+          <option value="rajshahi">Rajshahi</option>
+          <option value="barisal">Barisal</option>
+          <option value="rangpur">Rangpur</option>
+          <option value="mymensingh">Mymensingh</option>
+        </select>
+        <select id="job-type-filter">
+          <option value="">All Types</option>
+          <option value="full-time">Full Time</option>
+          <option value="part-time">Part Time</option>
+          <option value="contract">Contract</option>
+          <option value="freelance">Freelance</option>
+          <option value="internship">Internship</option>
+        </select>
+        <select id="experience-filter">
+          <option value="">Any Experience</option>
+          <option value="entry">Entry Level</option>
+          <option value="mid">Mid Level</option>
+          <option value="senior">Senior Level</option>
+        </select>
+        <button type="button" class="btn-primary" onclick="filterJobs()">
+          <i class="fas fa-search"></i> Search
+        </button>
+      </form>
+      
+      <div class="filter-options">
+        <span>Quick filters:</span>
+        <div class="filter-tags">
+          <div class="filter-tag">
+            <span>Remote</span>
+            <span class="close" onclick="removeFilter('remote')">&times;</span>
+          </div>
+          <div class="filter-tag">
+            <span>Urgent</span>
+            <span class="close" onclick="removeFilter('urgent')">&times;</span>
+          </div>
+          <div class="filter-tag">
+            <span>High Demand</span>
+            <span class="close" onclick="removeFilter('high-demand')">&times;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
     <section class="results" id="job-container" aria-label="Search results">
-      <!-- Jobs will be dynamically injected here -->
+      <div class="results-header">
+        <p id="results-count">Showing 8 of 24 jobs</p>
+        <div class="sort-options">
+          <label for="sort-by">Sort by:</label>
+          <select id="sort-by" onchange="sortJobs()">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="salary-high">Salary: High to Low</option>
+            <option value="salary-low">Salary: Low to High</option>
+            <option value="relevance">Relevance</option>
+          </select>
+        </div>
+      </div>
+      <!-- Jobs will appear here -->
     </section>
-  </main>
+    
+    <div class="pagination" id="pagination">
+      <button onclick="changePage(1)" class="active">1</button>
+      <button onclick="changePage(2)">2</button>
+      <button onclick="changePage(3)">3</button>
+      <button onclick="changePage(4)">4</button>
+      <button onclick="nextPage()"><i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
 
-  <footer role="contentinfo" style="text-align:center; margin: 2rem 0; font-size: 0.9rem;">
-    &copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh
+  <footer role="contentinfo">
+    <p>&copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh</p>
+    <p>Follow us: 
+      <a href="#"><i class="fab fa-facebook"></i></a> 
+      <a href="#"><i class="fab fa-twitter"></i></a> 
+      <a href="#"><i class="fab fa-linkedin"></i></a> 
+      <a href="#"><i class="fab fa-instagram"></i></a>
+    </p>
   </footer>
+  
+  <div class="toast" id="toast">Job saved successfully!</div>
 
   <script>
+    // Menu toggle
+    function toggleMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      if(sidebar.style.left === '0px') {
+        sidebar.style.left = '-250px';
+        overlay.style.display = 'none';
+      } else {
+        sidebar.style.left = '0px';
+        overlay.style.display = 'block';
+      }
+    }
+    
+    // Show toast notification
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = 'toast' + (isError ? ' error' : '');
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+    
+    // Toggle profile menu
+    function toggleProfileMenu() {
+      // Implementation for profile dropdown
+      console.log("Profile menu toggled");
+    }
+    
+    // Show notifications
+    function showNotifications() {
+      // Implementation for notifications
+      console.log("Notifications shown");
+    }
+    
+    // Remove filter tag
+    function removeFilter(filter) {
+      // Implementation for removing filter
+      console.log(`Filter ${filter} removed`);
+    }
+    
+    // Change page in pagination
+    function changePage(page) {
+      const buttons = document.querySelectorAll('.pagination button');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      // Implementation for pagination
+      console.log(`Changed to page ${page}`);
+    }
+    
+    function nextPage() {
+      // Implementation for next page
+      console.log("Next page");
+    }
+
+    // Sample job data with more details
     const jobs = [
-      {
-        id: 1,
-        title: "Electrician Needed",
-        company: "ABC Solutions",
-        location: "Mirpur, Dhaka",
-        salary: "৳800/day",
-        type: "full-time",
-        posted: "2 days ago",
-        skills: ["Wiring", "AC Repair", "Electrical Maintenance"],
-        description: "Need experienced electrician for residential building wiring. Must have own tools."
+      { 
+        id: 1, 
+        title: "Electrician Needed for Residential Wiring", 
+        company: "ABC Solutions Ltd.", 
+        location: "Mirpur, Dhaka", 
+        salary: "৳800/day", 
+        type: "full-time", 
+        posted: "2 days ago", 
+        skills: ["Wiring", "AC Repair", "Electrical Maintenance", "Safety Compliance"], 
+        description: "Experienced electrician needed for residential wiring projects. Must have at least 3 years of experience and knowledge of modern electrical systems. We provide tools and transportation allowance. Immediate joining preferred.",
+        experience: "mid",
+        remote: false,
+        urgent: true,
+        companyLogo: "ABS",
+        applications: 12
       },
-      {
-        id: 2,
-        title: "Plumber for Apartment Complex",
-        company: "City Developers",
-        location: "Banani, Dhaka",
-        salary: "৳1,200/day",
-        type: "contract",
-        posted: "5 hours ago",
-        skills: ["Pipe Fitting", "Leak Repair", "Water Pump"],
-        description: "Immediate opening for certified plumber. 2-week contract with possible extension."
+      { 
+        id: 2, 
+        title: "Plumber for Apartment Complex", 
+        company: "City Developers", 
+        location: "Banani, Dhaka", 
+        salary: "৳1,200/day", 
+        type: "contract", 
+        posted: "5 hours ago", 
+        skills: ["Pipe Fitting", "Leak Repair", "Water Pump", "Sanitary Installation"], 
+        description: "Immediate opening for certified plumber, 2-week contract for a new apartment complex. Must have own tools and valid certification. Accommodation provided for non-Dhaka residents.",
+        experience: "mid",
+        remote: false,
+        urgent: true,
+        companyLogo: "CD",
+        applications: 8
       },
-      {
-        id: 3,
-        title: "AC Technician",
-        company: "Cool Comfort Ltd",
-        location: "Gulshan, Dhaka",
-        salary: "৳15,000/month",
-        type: "full-time",
-        posted: "1 day ago",
-        skills: ["AC Installation", "Gas Charging", "Maintenance"],
-        description: "Full-time position with benefits. Minimum 2 years experience required."
+      { 
+        id: 3, 
+        title: "AC Technician with Installation Experience", 
+        company: "Cool Comfort Ltd.", 
+        location: "Gulshan, Dhaka", 
+        salary: "৳15,000-20,000/month", 
+        type: "full-time", 
+        posted: "1 day ago", 
+        skills: ["AC Installation", "Gas Charging", "Maintenance", "Troubleshooting"], 
+        description: "Full-time AC technician with minimum 2 years experience required. Must be proficient in installation, maintenance, and repair of all major AC brands. We offer performance bonuses and overtime pay.",
+        experience: "entry",
+        remote: false,
+        urgent: false,
+        companyLogo: "CC",
+        applications: 15
+      },
+      { 
+        id: 4, 
+        title: "Remote Web Developer", 
+        company: "Tech Solutions BD", 
+        location: "Remote", 
+        salary: "৳40,000-60,000/month", 
+        type: "full-time", 
+        posted: "3 days ago", 
+        skills: ["JavaScript", "React", "Node.js", "MongoDB"], 
+        description: "Looking for a skilled web developer to work remotely on various projects. Must have 2+ years of experience with modern JavaScript frameworks. Flexible hours with daily standup meetings required.",
+        experience: "mid",
+        remote: true,
+        urgent: false,
+        companyLogo: "TS",
+        applications: 23
+      },
+      { 
+        id: 5, 
+        title: "Senior Graphic Designer", 
+        company: "Creative Minds Agency", 
+        location: "Dhanmondi, Dhaka", 
+        salary: "৳50,000-70,000/month", 
+        type: "full-time", 
+        posted: "1 week ago", 
+        skills: ["Adobe Photoshop", "Illustrator", "UI/UX Design", "Branding"], 
+        description: "Senior graphic designer needed with 5+ years of agency experience. Must have strong portfolio showcasing branding projects. Leadership experience preferred as you will be guiding a small team.",
+        experience: "senior",
+        remote: false,
+        urgent: false,
+        companyLogo: "CM",
+        applications: 18
+      },
+      { 
+        id: 6, 
+        title: "Part-time Content Writer", 
+        company: "Digital Marketing Pro", 
+        location: "Uttara, Dhaka", 
+        salary: "৳300/article", 
+        type: "part-time", 
+        posted: "2 days ago", 
+        skills: ["Content Writing", "SEO", "Blogging", "Research"], 
+        description: "Looking for a part-time content writer to create engaging articles for our clients. Must have excellent English skills and basic SEO knowledge. Work from home available after initial training.",
+        experience: "entry",
+        remote: true,
+        urgent: true,
+        companyLogo: "DM",
+        applications: 32
+      },
+      { 
+        id: 7, 
+        title: "Mobile App Developer", 
+        company: "AppWorks Studio", 
+        location: "Mohakhali, Dhaka", 
+        salary: "৳60,000-80,000/month", 
+        type: "full-time", 
+        posted: "4 days ago", 
+        skills: ["React Native", "Flutter", "Firebase", "REST APIs"], 
+        description: "Experienced mobile app developer needed to join our growing team. Must have published at least 3 apps on Play Store/App Store. We offer flexible hours and quarterly performance bonuses.",
+        experience: "mid",
+        remote: false,
+        urgent: false,
+        companyLogo: "AW",
+        applications: 14
+      },
+      { 
+        id: 8, 
+        title: "Marketing Intern", 
+        company: "Growth Hackers BD", 
+        location: "Banani, Dhaka", 
+        salary: "৳10,000-15,000/month", 
+        type: "internship", 
+        posted: "1 day ago", 
+        skills: ["Social Media", "Content Creation", "Analytics", "Communication"], 
+        description: "Marketing internship for fresh graduates or final year students. Learn digital marketing strategies while working on real client projects. Possibility of full-time employment after internship.",
+        experience: "entry",
+        remote: false,
+        urgent: true,
+        companyLogo: "GH",
+        applications: 27
       }
     ];
 
-    function renderJobs(list) {
+    function renderJobs(list){
       const container = document.getElementById('job-container');
-      container.innerHTML = '';
-
-      if (list.length === 0) {
-        container.innerHTML = '<p>No jobs match your filters. Try different criteria.</p>';
-        return;
+      container.innerHTML='';
+      
+      if(list.length===0){ 
+        container.innerHTML=`
+          <div style="text-align: center; padding: 2rem;">
+            <i class="fas fa-search" style="font-size: 3rem; color: var(--dark-blue); margin-bottom: 1rem;"></i>
+            <h3>No jobs match your filters</h3>
+            <p>Try adjusting your search criteria or browse all available jobs</p>
+            <button class="btn-primary" onclick="clearFilters()">Clear All Filters</button>
+          </div>
+        `; 
+        return; 
       }
 
-      list.forEach(job => {
-        const skillsHTML = job.skills.map(skill =>
-          `<span>${skill}</span>`
-        ).join('');
-
+      list.forEach(job=>{
+        const skillsHTML = job.skills.map(skill=>`<span>${skill}</span>`).join('');
         const card = document.createElement('article');
-        card.className = 'job-card';
-        card.innerHTML = `
-          <h2>${job.title}</h2>
-          <p><strong>${job.company}</strong></p>
-          <p class="location">📍 ${job.location}</p>
+        card.className='job-card';
+        card.innerHTML=`
+          <div class="job-card-header">
+            <div class="job-card-company">
+              <div class="company-logo">${job.companyLogo}</div>
+              <div>
+                <h2>${job.title}</h2>
+                <p><strong>${job.company}</strong></p>
+              </div>
+            </div>
+            ${job.urgent ? '<div class="job-card-badge">Urgent</div>' : ''}
+          </div>
+          <div class="job-meta">
+            <div class="job-meta-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>${job.location}</span>
+            </div>
+            <div class="job-meta-item">
+              <i class="fas fa-money-bill-wave"></i>
+              <span>${job.salary}</span>
+            </div>
+            <div class="job-meta-item">
+              <i class="fas fa-briefcase"></i>
+              <span>${job.type}</span>
+            </div>
+            <div class="job-meta-item">
+              <i class="fas fa-users"></i>
+              <span>${job.applications} Applications</span>
+            </div>
+          </div>
           <div class="skill-tags">${skillsHTML}</div>
-          <p>${job.description}</p>
-          <p><strong>Type:</strong> ${job.type} &nbsp; | &nbsp; <strong>Salary:</strong> ${job.salary}</p>
+          <div class="job-description">
+            <p>${job.description.substring(0, 120)}...</p>
+            <span class="read-more">Read more</span>
+          </div>
           <div class="job-actions">
-            <button class="btn-primary" onclick="applyToJob(${job.id})">Apply Now</button>
-            <button class="btn-primary" style="background:#fff; color:var(--dark-blue); border:1px solid var(--dark-blue);" onclick="saveJob(${job.id})">Save Job</button>
-            <button class="btn-primary" onclick="location.href='job-details.html?id=${job.id}'">View Details</button>
+            <button class="btn-primary" onclick="applyToJob(${job.id})">
+              <i class="fas fa-paper-plane"></i> Apply Now
+            </button>
+            <button class="btn-secondary" onclick="saveJob(${job.id})">
+              <i class="far fa-bookmark"></i> Save Job
+            </button>
+            <button class="btn-secondary" onclick="location.href='job-details.html?id=${job.id}'">
+              <i class="fas fa-eye"></i> View Details
+            </button>
           </div>
           <small>Posted: ${job.posted}</small>
         `;
         container.appendChild(card);
       });
     }
+    
+    function clearFilters() {
+      document.getElementById('search-input').value = '';
+      document.getElementById('location-filter').value = '';
+      document.getElementById('job-type-filter').value = '';
+      document.getElementById('experience-filter').value = '';
+      filterJobs();
+    }
 
     function filterJobs() {
       const location = document.getElementById('location-filter').value.toLowerCase();
       const type = document.getElementById('job-type-filter').value;
+      const experience = document.getElementById('experience-filter').value;
       const search = document.getElementById('search-input').value.toLowerCase();
-
+      
       const filtered = jobs.filter(job =>
-        (location === '' || job.location.toLowerCase().includes(location)) &&
-        (type === '' || job.type === type) &&
-        (search === '' || job.title.toLowerCase().includes(search) || job.description.toLowerCase().includes(search))
+        (location==='' || job.location.toLowerCase().includes(location)) &&
+        (type==='' || job.type===type) &&
+        (experience==='' || job.experience===experience) &&
+        (search==='' || 
+          job.title.toLowerCase().includes(search) || 
+          job.description.toLowerCase().includes(search) ||
+          job.skills.some(skill => skill.toLowerCase().includes(search)))
       );
-
+      
+      document.getElementById('results-count').textContent = `Showing ${filtered.length} of ${jobs.length} jobs`;
       renderJobs(filtered);
     }
+    
+    function sortJobs() {
+      const sortBy = document.getElementById('sort-by').value;
+      let sortedJobs = [...jobs];
+      
+      switch(sortBy) {
+        case 'newest':
+          // Assuming newer jobs have lower IDs (for demo purposes)
+          sortedJobs.sort((a, b) => b.id - a.id);
+          break;
+        case 'oldest':
+          sortedJobs.sort((a, b) => a.id - b.id);
+          break;
+        case 'salary-high':
+          sortedJobs.sort((a, b) => {
+            const aSalary = parseInt(a.salary.replace(/[^\d]/g, ''));
+            const bSalary = parseInt(b.salary.replace(/[^\d]/g, ''));
+            return bSalary - aSalary;
+          });
+          break;
+        case 'salary-low':
+          sortedJobs.sort((a, b) => {
+            const aSalary = parseInt(a.salary.replace(/[^\d]/g, ''));
+            const bSalary = parseInt(b.salary.replace(/[^\d]/g, ''));
+            return aSalary - bSalary;
+          });
+          break;
+        case 'relevance':
+          // For demo, we'll consider jobs with more applications as more relevant
+          sortedJobs.sort((a, b) => b.applications - a.applications);
+          break;
+      }
+      
+      renderJobs(sortedJobs);
+    }
 
-    document.getElementById('location-filter').addEventListener('change', filterJobs);
-    document.getElementById('job-type-filter').addEventListener('change', filterJobs);
-    document.getElementById('search-input').addEventListener('input', filterJobs);
-
-    function applyToJob(id) {
-      alert(`Applying to job ID: ${id}`);
+    function applyToJob(id) { 
+      showToast(`Application sent for job #${id}!`);
+      // In a real app, this would connect to a backend
     }
 
     function saveJob(id) {
       let saved = JSON.parse(localStorage.getItem('savedJobs') || '[]');
-      if (!saved.includes(id)) {
-        saved.push(id);
-        localStorage.setItem('savedJobs', JSON.stringify(saved));
-        alert('Job saved successfully!');
-      } else {
-        alert('You already saved this job.');
+      if(!saved.includes(id)){ 
+        saved.push(id); 
+        localStorage.setItem('savedJobs',JSON.stringify(saved)); 
+        showToast('Job saved successfully!');
+      } else{ 
+        showToast('You already saved this job.', true);
       }
     }
 
-    window.onload = () => {
-      if (!localStorage.getItem('savedJobs')) {
-        localStorage.setItem('savedJobs', JSON.stringify([]));
+    window.onload = ()=>{
+      if(!localStorage.getItem('savedJobs')){ 
+        localStorage.setItem('savedJobs','[]'); 
       }
       renderJobs(jobs);
+      document.getElementById('results-count').textContent = `Showing ${jobs.length} of ${jobs.length} jobs`;
     };
   </script>
 </body>
