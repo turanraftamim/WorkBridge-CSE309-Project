@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Posts - WorkBridge</title>
+  <title>Post a Job or Service - WorkBridge</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -13,11 +13,10 @@
       --dark-blue: #3357a4;
       --gray-dark: #3a3a3a;
       --btn-hover: #274a85;
-      --sidebar-bg: #d1d9f7;
-      --delete-hover: #a23434;
       --success: #4caf50;
       --warning: #ff9800;
       --danger: #f44336;
+      --info: #2196f3;
     }
     * {
       margin: 0; padding: 0; box-sizing: border-box;
@@ -26,6 +25,7 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: var(--ash);
       color: var(--gray-dark);
+      line-height: 1.6;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -158,482 +158,279 @@
       display:none;
       z-index:100;
     }
-    
+
     /* Main Content */
     main {
-      display: flex;
-      gap: 2rem;
-      max-width: 1200px;
+      flex-grow: 1;
+      max-width: 1000px;
       margin: 2rem auto;
       padding: 0 1rem;
     }
     
-    aside.dashboard-sidebar {
-      width: 280px;
+    .post-container {
       background-color: var(--white);
-      padding: 1.5rem;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      height: fit-content;
+      overflow: hidden;
     }
     
-    .user-profile-card {
-      text-align: center;
-      padding-bottom: 1.5rem;
-      margin-bottom: 1.5rem;
-      border-bottom: 1px solid #eee;
-    }
-    
-    .user-profile-img {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background-color: var(--dark-blue);
+    .post-header {
+      background: linear-gradient(135deg, var(--light-blue), var(--dark-blue));
       color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      font-weight: bold;
-      margin: 0 auto 1rem;
+      padding: 2rem;
+      text-align: center;
     }
     
-    .user-profile-card h3 {
-      color: var(--dark-blue);
-      margin-bottom: 0.3rem;
-      font-size: 1.1rem;
-    }
-    
-    .user-profile-card p {
-      color: #666;
-      font-size: 0.9rem;
-    }
-    
-    .sidebar-nav ul {
-      list-style: none;
-    }
-    
-    .sidebar-nav li {
+    .post-header h1 {
+      font-size: 2.2rem;
       margin-bottom: 0.5rem;
     }
     
-    .sidebar-nav a {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      padding: 0.8rem 1rem;
-      text-decoration: none;
-      color: var(--gray-dark);
-      border-radius: 6px;
-      transition: all 0.3s ease;
+    .post-header p {
+      opacity: 0.9;
     }
     
-    .sidebar-nav a:hover,
-    .sidebar-nav a.active {
-      background-color: var(--dark-blue);
-      color: var(--white);
-    }
-    
-    .sidebar-nav a.active {
-      font-weight: 600;
-    }
-    
-    .sidebar-nav .badge {
-      margin-left: auto;
-      background-color: var(--danger);
-      color: white;
-      padding: 0.2rem 0.5rem;
-      border-radius: 12px;
-      font-size: 0.75rem;
-    }
-    
-    .dashboard-content {
-      flex: 1;
-      background-color: var(--white);
+    .post-content {
       padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
     
-    .content-header {
+    .form-tabs {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      border-bottom: 2px solid var(--light-blue);
       margin-bottom: 2rem;
     }
     
-    .content-header h1 {
+    .form-tab {
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--gray-dark);
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+    }
+    
+    .form-tab.active {
       color: var(--dark-blue);
-      font-size: 1.8rem;
-      margin: 0;
+      border-bottom: 3px solid var(--dark-blue);
     }
     
-    .post-filters {
+    .form-tab:hover {
+      color: var(--dark-blue);
+    }
+    
+    .post-form {
       display: flex;
-      gap: 1rem;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .form-section {
+      background-color: var(--ash);
+      padding: 1.5rem;
+      border-radius: 8px;
+    }
+    
+    .form-section h3 {
+      color: var(--dark-blue);
+      margin-bottom: 1rem;
+      display: flex;
       align-items: center;
+      gap: 0.5rem;
     }
     
-    .filter-select {
-      padding: 0.5rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      background-color: white;
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
     }
     
-    .search-box {
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .form-group label {
+      font-weight: 600;
+      color: var(--dark-blue);
+      font-size: 0.9rem;
+    }
+    
+    .form-group .required::after {
+      content: '*';
+      color: var(--danger);
+      margin-left: 0.3rem;
+    }
+    
+    .input-with-icon {
       position: relative;
     }
     
-    .search-box input {
-      padding: 0.5rem 1rem 0.5rem 2.5rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      width: 200px;
-    }
-    
-    .search-box i {
+    .input-with-icon i {
       position: absolute;
-      left: 10px;
+      left: 12px;
       top: 50%;
       transform: translateY(-50%);
       color: #777;
     }
     
-    .post-stats {
-      display: flex;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
+    .input-with-icon input, 
+    .input-with-icon textarea,
+    .input-with-icon select {
+      padding-left: 40px;
     }
     
-    .stat-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1rem;
-      background-color: var(--ash);
-      border-radius: 8px;
-      min-width: 120px;
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 0.8rem 1rem;
+      border: 1.5px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      width: 100%;
     }
     
-    .stat-value {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--dark-blue);
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--dark-blue);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(51, 87, 164, 0.2);
     }
     
-    .stat-label {
-      font-size: 0.9rem;
-      color: #666;
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
     }
     
-    .view-toggle {
-      display: flex;
-      background-color: var(--ash);
-      border-radius: 6px;
-      padding: 0.3rem;
-      margin-bottom: 1.5rem;
+    .skills-input-container {
+      position: relative;
     }
     
-    .view-toggle button {
-      padding: 0.5rem 1rem;
-      border: none;
-      background: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    
-    .view-toggle button.active {
-      background-color: var(--dark-blue);
-      color: white;
-    }
-    
-    .post-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5rem;
-    }
-    
-    .post-card {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      overflow: hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      background-color: white;
-    }
-    
-    .post-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    
-    .post-header {
-      padding: 1.2rem;
-      border-bottom: 1px solid #eee;
-    }
-    
-    .post-title {
-      color: var(--dark-blue);
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-    }
-    
-    .post-meta {
-      display: flex;
-      gap: 1rem;
-      font-size: 0.85rem;
-      color: #666;
-    }
-    
-    .post-type {
-      display: inline-block;
-      padding: 0.2rem 0.6rem;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-    
-    .type-job {
-      background-color: rgba(51, 87, 164, 0.15);
-      color: var(--dark-blue);
-    }
-    
-    .type-service {
-      background-color: rgba(76, 175, 80, 0.15);
-      color: var(--success);
-    }
-    
-    .post-body {
-      padding: 1.2rem;
-    }
-    
-    .post-details {
-      margin-bottom: 1rem;
-    }
-    
-    .post-detail {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-    }
-    
-    .post-skills {
+    .skills-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
-      margin: 1rem 0;
+      margin-top: 0.5rem;
     }
     
     .skill-tag {
       background-color: var(--light-blue);
       color: var(--dark-blue);
-      padding: 0.3rem 0.6rem;
-      border-radius: 12px;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
       font-size: 0.8rem;
-    }
-    
-    .post-footer {
-      padding: 1rem 1.2rem;
-      background-color: #f9f9f9;
-      border-top: 1px solid #eee;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      gap: 0.3rem;
     }
     
-    .post-status {
-      padding: 0.3rem 0.8rem;
-      border-radius: 12px;
-      font-size: 0.8rem;
+    .skill-tag .remove-skill {
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    
+    .budget-range {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .budget-range span {
+      color: var(--dark-blue);
       font-weight: 600;
     }
     
-    .status-active {
-      background-color: rgba(76, 175, 80, 0.15);
-      color: var(--success);
+    input[type="range"] {
+      flex: 1;
+      height: 5px;
+      -webkit-appearance: none;
+      background: #ddd;
+      border-radius: 5px;
+      outline: none;
     }
     
-    .status-pending {
-      background-color: rgba(255, 152, 0, 0.15);
-      color: var(--warning);
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: var(--dark-blue);
+      border-radius: 50%;
+      cursor: pointer;
     }
     
-    .status-expired {
-      background-color: rgba(244, 67, 54, 0.15);
-      color: var(--danger);
-    }
-    
-    .post-actions {
+    .form-actions {
       display: flex;
-      gap: 0.5rem;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #eee;
     }
     
     .btn {
-      padding: 0.5rem 1rem;
+      padding: 0.8rem 2rem;
       border: none;
-      border-radius: 4px;
-      cursor: pointer;
+      border-radius: 5px;
       font-weight: 600;
-      display: flex;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      transition: all 0.3s ease;
-    }
-    
-    .btn-edit {
-      background-color: var(--light-blue);
-      color: var(--dark-blue);
-    }
-    
-    .btn-edit:hover {
-      background-color: var(--dark-blue);
-      color: white;
-    }
-    
-    .btn-delete {
-      background-color: #ffebee;
-      color: var(--danger);
-    }
-    
-    .btn-delete:hover {
-      background-color: var(--danger);
-      color: white;
-    }
-    
-    .btn-view {
-      background-color: #e8f5e9;
-      color: var(--success);
-    }
-    
-    .btn-view:hover {
-      background-color: var(--success);
-      color: white;
-    }
-    
-    .empty-state {
-      text-align: center;
-      padding: 3rem;
-      grid-column: 1 / -1;
-    }
-    
-    .empty-state i {
-      font-size: 3rem;
-      color: var(--light-blue);
-      margin-bottom: 1rem;
-    }
-    
-    .empty-state h3 {
-      color: var(--dark-blue);
-      margin-bottom: 0.5rem;
-    }
-    
-    .empty-state p {
-      color: #666;
-      margin-bottom: 1.5rem;
     }
     
     .btn-primary {
       background-color: var(--dark-blue);
-      color: white;
-      padding: 0.8rem 1.5rem;
-      border-radius: 4px;
-      text-decoration: none;
-      display: inline-block;
-      font-weight: 600;
-      transition: background-color 0.3s ease;
+      color: var(--white);
     }
     
     .btn-primary:hover {
       background-color: var(--btn-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
     
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: var(--success);
-      color: white;
-      padding: 1rem 1.5rem;
-      border-radius: 5px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--dark-blue);
+      border: 2px solid var(--dark-blue);
+    }
+    
+    .btn-secondary:hover {
+      background-color: rgba(51, 87, 164, 0.1);
+    }
+    
+    .form-tips {
+      background-color: var(--light-blue);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-top: 2rem;
+    }
+    
+    .form-tips h3 {
+      color: var(--dark-blue);
+      margin-bottom: 1rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      z-index: 1000;
-      transform: translateY(100px);
-      opacity: 0;
-      transition: all 0.3s ease;
     }
     
-    .toast.show {
-      transform: translateY(0);
-      opacity: 1;
+    .tips-list {
+      list-style: none;
     }
     
-    .toast.error {
-      background-color: var(--danger);
-    }
-    
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.5);
+    .tips-list li {
+      margin-bottom: 0.8rem;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
+      align-items: flex-start;
+      gap: 0.5rem;
     }
     
-    .modal.show {
-      opacity: 1;
-      visibility: visible;
-    }
-    
-    .modal-content {
-      background-color: white;
-      padding: 2rem;
-      border-radius: 8px;
-      max-width: 500px;
-      width: 90%;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-    }
-    
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-    
-    .modal-header h3 {
+    .tips-list li i {
       color: var(--dark-blue);
-    }
-    
-    .modal-close {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: #666;
-    }
-    
-    .modal-body {
-      margin-bottom: 1.5rem;
-    }
-    
-    .modal-footer {
-      display: flex;
-      justify-content: flex-end;
-      gap: 1rem;
+      margin-top: 0.2rem;
     }
     
     footer {
@@ -667,48 +464,91 @@
       text-decoration: underline;
     }
     
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--success);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 5px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 1000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .toast.error {
+      background-color: var(--danger);
+    }
+    
     @media (max-width: 900px) {
-      main {
-        flex-direction: column;
-      }
-      
-      aside.dashboard-sidebar {
-        width: 100%;
-      }
-      
-      .content-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-      }
-      
-      .post-filters {
-        width: 100%;
-        justify-content: space-between;
+      .form-grid {
+        grid-template-columns: 1fr;
       }
     }
     
-    @media (max-width: 600px) {
-      .post-list {
-        grid-template-columns: 1fr;
+    @media (max-width: 768px) {
+      .post-header h1 {
+        font-size: 1.8rem;
       }
       
-      .post-filters {
+      .form-tabs {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
+        border-bottom: none;
       }
       
-      .search-box {
-        width: 100%;
+      .form-tab {
+        border-bottom: 1px solid #ddd;
+        border-left: 3px solid transparent;
+        border-bottom: none;
       }
       
-      .search-box input {
+      .form-tab.active {
+        border-left: 3px solid var(--dark-blue);
+        border-bottom: none;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+      }
+      
+      .btn {
         width: 100%;
+        justify-content: center;
       }
       
       .user-actions .profile span {
         display: none;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      header {
+        padding: 0.8rem;
+      }
+      
+      header .logo {
+        font-size: 1.5rem;
+      }
+      
+      .post-header, .post-content {
+        padding: 1.5rem;
+      }
+      
+      .budget-range {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
       }
     }
   </style>
@@ -740,7 +580,7 @@
       <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
       <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
       <li><a href="search.html"><i class="fas fa-search"></i> Find Jobs/Services</a></li>
-      <li><a href="post-job.html"><i class="fas fa-bullhorn"></i> Post Job/Service</a></li>
+      <li><a href="post-job.html" class="active"><i class="fas fa-bullhorn"></i> Post Job/Service</a></li>
       <li><a href="dashboard.html"><i class="fas fa-chart-bar"></i> Dashboard</a></li>
       <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
       <li><a href="messages.html"><i class="fas fa-envelope"></i> Messages</a></li>
@@ -756,110 +596,156 @@
 
   <!-- Main Content -->
   <main>
-    <aside class="dashboard-sidebar">
-      <div class="user-profile-card">
-        <div class="user-profile-img">TS</div>
-        <h3>Turan Smith</h3>
-        <p>Premium Member</p>
+    <div class="post-container">
+      <div class="post-header">
+        <h1>Post a Job or Service</h1>
+        <p>Reach thousands of skilled professionals across Bangladesh</p>
       </div>
       
-      <nav class="sidebar-nav">
-        <ul>
-          <li><a href="dashboard.html">
-            <i class="fas fa-chart-pie"></i> Overview
-          </a></li>
-          <li><a href="my-posts.html" class="active">
-            <i class="fas fa-bullhorn"></i> My Posts
-            <span class="badge">5</span>
-          </a></li>
-          <li><a href="applications.html">
-            <i class="fas fa-file-alt"></i> Applications
-            <span class="badge">3</span>
-          </a></li>
-          <li><a href="messages.html">
-            <i class="fas fa-envelope"></i> Messages
-            <span class="badge">2</span>
-          </a></li>
-          <li><a href="saved-jobs.html">
-            <i class="fas fa-bookmark"></i> Saved Jobs
-          </a></li>
-          <li><a href="profile.html">
-            <i class="fas fa-user"></i> Profile Settings
-          </a></li>
-        </ul>
-      </nav>
-    </aside>
-
-    <section class="dashboard-content">
-      <div class="content-header">
-        <h1>My Posts</h1>
-        <div class="post-filters">
-          <div class="search-box">
-            <i class="fas fa-search"></i>
-            <input type="text" placeholder="Search posts..." id="post-search">
+      <div class="post-content">
+        <div class="form-tabs">
+          <div class="form-tab active" data-tab="job">Post a Job</div>
+          <div class="form-tab" data-tab="service">Offer a Service</div>
+        </div>
+        
+        <form class="post-form" id="postForm" novalidate>
+          <div class="form-section">
+            <h3><i class="fas fa-info-circle"></i> Basic Information</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="title" class="required">Title</label>
+                <div class="input-with-icon">
+                  <i class="fas fa-heading"></i>
+                  <input type="text" id="title" name="title" placeholder="e.g. Experienced Electrician Needed" required />
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="category" class="required">Category</label>
+                <div class="input-with-icon">
+                  <i class="fas fa-folder"></i>
+                  <select id="category" name="category" required>
+                    <option value="" disabled selected>Select a category</option>
+                    <option value="construction">Construction & Repair</option>
+                    <option value="electrical">Electrical Services</option>
+                    <option value="plumbing">Plumbing</option>
+                    <option value="cleaning">Cleaning Services</option>
+                    <option value="design">Design & Creative</option>
+                    <option value="it">IT & Programming</option>
+                    <option value="teaching">Teaching & Tutoring</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="description" class="required">Description</label>
+              <div class="input-with-icon">
+                <i class="fas fa-align-left"></i>
+                <textarea id="description" name="description" placeholder="Describe the job or service in detail..." required></textarea>
+              </div>
+            </div>
           </div>
-          <select class="filter-select" id="type-filter">
-            <option value="all">All Types</option>
-            <option value="job">Jobs</option>
-            <option value="service">Services</option>
-          </select>
-          <select class="filter-select" id="status-filter">
-            <option value="all">All Statuses</option>
-            <option value="active">Active</option>
-            <option value="pending">Pending</option>
-            <option value="expired">Expired</option>
-          </select>
-        </div>
-      </div>
-      
-      <div class="post-stats">
-        <div class="stat-item">
-          <span class="stat-value">8</span>
-          <span class="stat-label">Total Posts</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">5</span>
-          <span class="stat-label">Active</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">2</span>
-          <span class="stat-label">Pending</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">1</span>
-          <span class="stat-label">Expired</span>
-        </div>
-      </div>
-      
-      <div class="view-toggle">
-        <button class="active" id="grid-view"><i class="fas fa-th"></i> Grid</button>
-        <button id="list-view"><i class="fas fa-list"></i> List</button>
-      </div>
-      
-      <div class="post-list" id="posts-container">
-        <!-- Posts will be loaded here dynamically -->
-      </div>
-    </section>
-  </main>
-
-  <!-- Delete Confirmation Modal -->
-  <div class="modal" id="delete-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Confirm Deletion</h3>
-        <button class="modal-close" onclick="closeModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure you want to delete this post? This action cannot be undone.</p>
-      </div>
-      <div class="modal-footer">
-        <button class="btn" onclick="closeModal()">Cancel</button>
-        <button class="btn btn-delete" onclick="confirmDelete()">Delete</button>
+          
+          <div class="form-section">
+            <h3><i class="fas fa-map-marker-alt"></i> Location & Details</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="location" class="required">Location</label>
+                <div class="input-with-icon">
+                  <i class="fas fa-map-pin"></i>
+                  <input type="text" id="location" name="location" placeholder="City or area" required />
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="job-type" class="required">Job Type</label>
+                <div class="input-with-icon">
+                  <i class="fas fa-briefcase"></i>
+                  <select id="job-type" name="job-type" required>
+                    <option value="" disabled selected>Select job type</option>
+                    <option value="fulltime">Full-time</option>
+                    <option value="parttime">Part-time</option>
+                    <option value="contract">Contract</option>
+                    <option value="freelance">Freelance</option>
+                    <option value="temporary">Temporary</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="skills">Required Skills</label>
+              <div class="input-with-icon">
+                <i class="fas fa-tools"></i>
+                <input type="text" id="skills" name="skills" placeholder="e.g. Plumbing, Design, Writing (comma separated)" />
+              </div>
+              <div class="skills-tags" id="skills-tags"></div>
+            </div>
+          </div>
+          
+          <div class="form-section">
+            <h3><i class="fas fa-money-bill-wave"></i> Budget & Compensation</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="budget-type">Budget Type</label>
+                <div class="input-with-icon">
+                  <i class="fas fa-money-check"></i>
+                  <select id="budget-type" name="budget-type">
+                    <option value="fixed">Fixed Price</option>
+                    <option value="hourly">Hourly Rate</option>
+                    <option value="negotiable">Negotiable</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="budget-amount">Budget Amount (৳)</label>
+                <div class="input-with-icon">
+                  <i class="fas fa-tag"></i>
+                  <input type="number" id="budget-amount" name="budget-amount" placeholder="0.00" min="0" />
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="budget-range">Budget Range</label>
+              <div class="budget-range">
+                <span>৳0</span>
+                <input type="range" id="budget-range" name="budget-range" min="0" max="100000" value="5000" step="1000" />
+                <span>৳100,000</span>
+              </div>
+              <div id="budget-value" style="text-align: center; margin-top: 0.5rem; font-weight: 600; color: var(--dark-blue);">
+                Selected: ৳5,000
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-tips">
+            <h3><i class="fas fa-lightbulb"></i> Posting Tips</h3>
+            <ul class="tips-list">
+              <li><i class="fas fa-check-circle"></i> Be specific about requirements and expectations</li>
+              <li><i class="fas fa-check-circle"></i> Include clear budget ranges to attract qualified candidates</li>
+              <li><i class="fas fa-check-circle"></i> Use relevant skills tags to increase visibility</li>
+              <li><i class="fas fa-check-circle"></i> Provide accurate location information</li>
+            </ul>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary">
+              <i class="fas fa-times"></i> Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-paper-plane"></i> Post Now
+            </button>
+          </div>
+        </form>
       </div>
     </div>
-  </div>
+  </main>
 
-  <footer role="contentinfo">
+  <footer>
     <p>&copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh</p>
     <div class="footer-links">
       <a href="about.html">About Us</a>
@@ -868,15 +754,28 @@
       <a href="help.html">Help Center</a>
     </div>
   </footer>
-  
-  <div class="toast" id="toast">Post deleted successfully</div>
+
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toast-message">Your job post has been submitted successfully!</span>
+  </div>
 
   <script>
-    // Menu toggle
+    // DOM Elements
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const toast = document.getElementById('toast');
+    const postForm = document.getElementById('postForm');
+    const formTabs = document.querySelectorAll('.form-tab');
+    const skillsInput = document.getElementById('skills');
+    const skillsTags = document.getElementById('skills-tags');
+    const budgetRange = document.getElementById('budget-range');
+    const budgetValue = document.getElementById('budget-value');
+    const logoutLink = document.getElementById('logout-link');
+    
+    // Toggle sidebar menu
     function toggleMenu() {
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('overlay');
-      if(sidebar.style.left === '0px') {
+      if (sidebar.style.left === '0px') {
         sidebar.style.left = '-250px';
         overlay.style.display = 'none';
       } else {
@@ -885,11 +784,30 @@
       }
     }
     
+    // Show notifications
+    function showNotifications() {
+      showToast('Redirecting to notifications');
+      setTimeout(() => {
+        window.location.href = 'notifications.html';
+      }, 1000);
+    }
+    
+    // Toggle profile menu (would be implemented with a dropdown)
+    function toggleProfileMenu() {
+      showToast('Profile menu would open here');
+    }
+    
     // Show toast notification
     function showToast(message, isError = false) {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.className = 'toast' + (isError ? ' error' : '');
+      const toastMessage = document.getElementById('toast-message');
+      toastMessage.textContent = message;
+      
+      if (isError) {
+        toast.classList.add('error');
+      } else {
+        toast.classList.remove('error');
+      }
+      
       toast.classList.add('show');
       
       setTimeout(() => {
@@ -897,257 +815,93 @@
       }, 3000);
     }
     
-    // Toggle profile menu
-    function toggleProfileMenu() {
-      // Implementation for profile dropdown
-      console.log("Profile menu toggled");
-    }
-    
-    // Show notifications
-    function showNotifications() {
-      // Implementation for notifications
-      console.log("Notifications shown");
-    }
-    
-    // Modal functions
-    function openModal() {
-      document.getElementById('delete-modal').classList.add('show');
-    }
-    
-    function closeModal() {
-      document.getElementById('delete-modal').classList.remove('show');
-    }
-    
-    function confirmDelete() {
-      closeModal();
-      showToast('Post deleted successfully');
-      // In a real app, this would actually delete the post
-    }
-    
-    // Sample post data
-    const posts = [
-      {
-        id: 1,
-        title: "Electrician Needed for Residential Wiring",
-        type: "job",
-        location: "Mirpur, Dhaka",
-        budget: "৳800/day",
-        skills: ["Electrical", "Wiring", "Maintenance", "Safety Compliance"],
-        status: "active",
-        applications: 12,
-        posted: "2 days ago",
-        description: "Experienced electrician needed for residential wiring projects. Must have at least 3 years of experience."
-      },
-      {
-        id: 2,
-        title: "Logo Design Service for Startup",
-        type: "service",
-        location: "Chittagong",
-        budget: "৳5,000 fixed",
-        skills: ["Photoshop", "Illustrator", "Logo Design", "Branding"],
-        status: "active",
-        applications: 8,
-        posted: "5 days ago",
-        description: "Creative logo design needed for a new tech startup. Modern and minimalist style preferred."
-      },
-      {
-        id: 3,
-        title: "Plumber for Apartment Complex",
-        type: "job",
-        location: "Banani, Dhaka",
-        budget: "৳1,200/day",
-        skills: ["Pipe Fitting", "Leak Repair", "Water Pump", "Sanitary Installation"],
-        status: "pending",
-        applications: 0,
-        posted: "1 day ago",
-        description: "Immediate opening for certified plumber for a new apartment complex. 2-week contract."
-      },
-      {
-        id: 4,
-        title: "AC Technician with Installation Experience",
-        type: "job",
-        location: "Gulshan, Dhaka",
-        budget: "৳15,000-20,000/month",
-        skills: ["AC Installation", "Gas Charging", "Maintenance", "Troubleshooting"],
-        status: "active",
-        applications: 15,
-        posted: "1 week ago",
-        description: "Full-time AC technician with minimum 2 years experience required. Must be proficient in installation."
-      },
-      {
-        id: 5,
-        title: "Content Writing Service for Blog",
-        type: "service",
-        location: "Remote",
-        budget: "৳300/article",
-        skills: ["Content Writing", "SEO", "Blogging", "Research"],
-        status: "active",
-        applications: 23,
-        posted: "3 weeks ago",
-        description: "Looking for a content writer to create engaging articles for our blog. Must have excellent English skills."
-      },
-      {
-        id: 6,
-        title: "Web Developer for E-commerce Site",
-        type: "job",
-        location: "Uttara, Dhaka",
-        budget: "৳40,000-60,000/month",
-        skills: ["JavaScript", "React", "Node.js", "MongoDB"],
-        status: "expired",
-        applications: 18,
-        posted: "1 month ago",
-        description: "Experienced web developer needed to build an e-commerce website. Must have experience with payment integration."
-      }
-    ];
-    
-    // Render posts
-    function renderPosts() {
-      const container = document.getElementById('posts-container');
-      const typeFilter = document.getElementById('type-filter').value;
-      const statusFilter = document.getElementById('status-filter').value;
-      const searchTerm = document.getElementById('post-search').value.toLowerCase();
-      
-      // Filter posts
-      const filteredPosts = posts.filter(post => {
-        const typeMatch = typeFilter === 'all' || post.type === typeFilter;
-        const statusMatch = statusFilter === 'all' || post.status === statusFilter;
-        const searchMatch = post.title.toLowerCase().includes(searchTerm) || 
-                           post.description.toLowerCase().includes(searchTerm) ||
-                           post.skills.some(skill => skill.toLowerCase().includes(searchTerm));
+    // Handle form tabs
+    formTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        formTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
         
-        return typeMatch && statusMatch && searchMatch;
+        const tabType = tab.getAttribute('data-tab');
+        showToast(`Now posting: ${tabType === 'job' ? 'Job' : 'Service'}`);
       });
+    });
+    
+    // Handle skills input
+    skillsInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ',') {
+        e.preventDefault();
+        addSkillTag(this.value.trim().replace(',', ''));
+        this.value = '';
+      }
+    });
+    
+    skillsInput.addEventListener('blur', function() {
+      if (this.value.trim() !== '') {
+        addSkillTag(this.value.trim());
+        this.value = '';
+      }
+    });
+    
+    function addSkillTag(skill) {
+      if (skill === '') return;
       
-      // Clear container
-      container.innerHTML = '';
+      const tag = document.createElement('div');
+      tag.className = 'skill-tag';
+      tag.innerHTML = `
+        ${skill}
+        <span class="remove-skill" onclick="removeSkillTag(this)">×</span>
+      `;
       
-      // Show empty state if no posts
-      if (filteredPosts.length === 0) {
-        container.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-file-alt"></i>
-            <h3>No posts found</h3>
-            <p>Try adjusting your filters or create a new post</p>
-            <a href="post-job.html" class="btn-primary">Create New Post</a>
-          </div>
-        `;
+      skillsTags.appendChild(tag);
+    }
+    
+    function removeSkillTag(element) {
+      element.parentNode.remove();
+    }
+    
+    // Handle budget range
+    budgetRange.addEventListener('input', function() {
+      const value = parseInt(this.value);
+      const formattedValue = value.toLocaleString('en-BD');
+      budgetValue.textContent = `Selected: ৳${formattedValue}`;
+    });
+    
+    // Form submission handler
+    postForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Basic validation
+      const title = document.getElementById('title').value;
+      const category = document.getElementById('category').value;
+      const description = document.getElementById('description').value;
+      const location = document.getElementById('location').value;
+      const jobType = document.getElementById('job-type').value;
+      
+      if (!title || !category || !description || !location || !jobType) {
+        showToast('Please fill in all required fields', true);
         return;
       }
       
-      // Render posts
-      filteredPosts.forEach(post => {
-        const skillsHTML = post.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('');
-        
-        const postElement = document.createElement('div');
-        postElement.className = 'post-card';
-        postElement.innerHTML = `
-          <div class="post-header">
-            <h3 class="post-title">${post.title}</h3>
-            <div class="post-meta">
-              <span class="post-type ${post.type === 'job' ? 'type-job' : 'type-service'}">
-                ${post.type === 'job' ? 'Job' : 'Service'}
-              </span>
-              <span>${post.posted}</span>
-            </div>
-          </div>
-          <div class="post-body">
-            <div class="post-details">
-              <div class="post-detail">
-                <i class="fas fa-map-marker-alt"></i>
-                <span>${post.location}</span>
-              </div>
-              <div class="post-detail">
-                <i class="fas fa-money-bill-wave"></i>
-                <span>${post.budget}</span>
-              </div>
-              <div class="post-detail">
-                <i class="fas fa-users"></i>
-                <span>${post.applications} Applications</span>
-              </div>
-            </div>
-            <p>${post.description}</p>
-            <div class="post-skills">
-              ${skillsHTML}
-            </div>
-          </div>
-          <div class="post-footer">
-            <span class="post-status status-${post.status}">
-              ${post.status.charAt(0).toUpperCase() + post.status.slice(1)}
-            </span>
-            <div class="post-actions">
-              <button class="btn btn-view" onclick="viewPost(${post.id})">
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="btn btn-edit" onclick="editPost(${post.id})">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="btn btn-delete" onclick="deletePost(${post.id})">
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
-          </div>
-        `;
-        
-        container.appendChild(postElement);
-      });
-    }
-    
-    // Post actions
-    function viewPost(id) {
-      // In a real app, this would navigate to the post view page
-      console.log(`Viewing post ${id}`);
-      showToast('Viewing post details');
-    }
-    
-    function editPost(id) {
-      // In a real app, this would navigate to the post edit page
-      console.log(`Editing post ${id}`);
-      showToast('Editing post');
-    }
-    
-    function deletePost(id) {
-      // Show confirmation modal
-      openModal();
-      // In a real app, we would store the ID to delete after confirmation
-      window.currentDeleteId = id;
-    }
-    
-    function confirmDelete() {
-      // In a real app, this would send a delete request to the server
-      console.log(`Deleting post ${window.currentDeleteId}`);
-      closeModal();
-      showToast('Post deleted successfully');
+      // Simulate form submission
+      showToast('Your job post has been submitted successfully!');
       
-      // Remove from local array (in a real app, this would be handled by the server response)
-      const index = posts.findIndex(post => post.id === window.currentDeleteId);
-      if (index !== -1) {
-        posts.splice(index, 1);
-        renderPosts();
-      }
-    }
+      // Reset form
+      setTimeout(() => {
+        postForm.reset();
+        skillsTags.innerHTML = '';
+        budgetRange.value = 5000;
+        budgetValue.textContent = 'Selected: ৳5,000';
+      }, 2000);
+    });
     
-    // Initialize the page
-    window.onload = function() {
-      renderPosts();
-      
-      // Add event listeners for filters
-      document.getElementById('type-filter').addEventListener('change', renderPosts);
-      document.getElementById('status-filter').addEventListener('change', renderPosts);
-      document.getElementById('post-search').addEventListener('input', renderPosts);
-      
-      // View toggle
-      document.getElementById('grid-view').addEventListener('click', function() {
-        this.classList.add('active');
-        document.getElementById('list-view').classList.remove('active');
-        document.getElementById('posts-container').classList.remove('list-view');
-      });
-      
-      document.getElementById('list-view').addEventListener('click', function() {
-        this.classList.add('active');
-        document.getElementById('grid-view').classList.remove('active');
-        document.getElementById('posts-container').classList.add('list-view');
-      });
-    };
+    // Handle logout
+    logoutLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      showToast('You have been logged out successfully');
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 1500);
+    });
   </script>
 </body>
 </html>
