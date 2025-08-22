@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>About WorkBridge - Empowering Bangladesh Workforce</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --light-blue: #a8c0ff;
@@ -11,6 +12,11 @@
       --white: #ffffff;
       --dark-blue: #3357a4;
       --gray-dark: #3a3a3a;
+      --btn-hover: #274a85;
+      --success: #4caf50;
+      --warning: #ff9800;
+      --danger: #f44336;
+      --info: #2196f3;
     }
     * {
       margin: 0;
@@ -22,147 +28,813 @@
       background-color: var(--ash);
       color: var(--gray-dark);
       line-height: 1.6;
-    }
-    nav {
-      background-color: var(--light-blue);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    nav .container {
-      max-width: 1200px;
-      margin: 0 auto;
+      min-height: 100vh;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+    }
+    
+    /* Header */
+    header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:sticky;
+      top:0;
+      z-index:1000;
+      background-color:var(--light-blue);
+      padding:0.8rem 1.5rem;
+      box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    header .menu-btn {
+      font-size:1.5rem;
+      background:none;
+      border:none;
+      cursor:pointer;
+      color:var(--dark-blue);
+    }
+
+    header .logo {
+      font-weight:700;
+      font-size:1.8rem;
+      color:var(--dark-blue);
+      letter-spacing:2px;
+      cursor:pointer;
+      user-select:none;
+      display: flex;
       align-items: center;
-      padding: 0.8rem 1rem;
+      gap: 0.5rem;
     }
-    nav .logo {
-      font-weight: 700;
-      font-size: 1.8rem;
-      color: var(--dark-blue);
-      letter-spacing: 2px;
-      cursor: pointer;
-      user-select: none;
-    }
-    nav ul {
-      list-style: none;
+
+    .user-actions {
       display: flex;
-      gap: 1.5rem;
+      align-items: center;
+      gap: 1rem;
     }
-    nav ul li {
+
+    .user-actions .notification-badge {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .user-actions .badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: var(--danger);
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .user-actions .profile {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .user-actions .profile-img {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background-color: var(--dark-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      position:fixed;
+      top:0;
+      left:-250px;
+      width:250px;
+      height:100%;
+      background-color:var(--white);
+      box-shadow:2px 0 5px rgba(0,0,0,0.2);
+      padding:2rem 1rem;
+      transition:left 0.3s ease;
+      z-index:1001;
+      overflow-y:auto;
+    }
+
+    .sidebar h2 {
+      margin-bottom:1.5rem;
+      color:var(--dark-blue);
+      text-align:center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar ul { list-style:none; }
+    .sidebar ul li { margin-bottom:1rem; }
+    .sidebar ul li a {
+      text-decoration:none;
+      color:var(--dark-blue);
+      font-weight:600;
+      display:flex;
+      align-items:center;
+      gap:0.5rem;
+      padding:0.6rem 0.8rem;
+      border-radius:5px;
+      transition:background-color 0.3s ease, color 0.3s ease;
+    }
+    .sidebar ul li a.active,
+    .sidebar ul li a:hover { background-color:var(--dark-blue); color:var(--white); }
+
+    .overlay {
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.3);
+      display:none;
+      z-index:100;
+    }
+
+    /* Main Content */
+    main {
+      flex-grow: 1;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    
+    .about-container {
+      background-color: var(--white);
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    
+    .about-header {
+      background: linear-gradient(135deg, var(--light-blue), var(--dark-blue));
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .about-header::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .about-header::after {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      left: -80px;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .about-header h1 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .about-header p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .about-content {
+      padding: 3rem 2rem;
+    }
+    
+    .mission-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+      align-items: center;
+    }
+    
+    .mission-content h2 {
+      color: var(--dark-blue);
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .mission-content p {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      color: #444;
+      line-height: 1.7;
+    }
+    
+    .mission-image {
+      background-color: var(--light-blue);
+      border-radius: 10px;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--dark-blue);
+      font-size: 5rem;
+    }
+    
+    .problem-solution {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    
+    .problem-box, .solution-box {
+      background-color: var(--ash);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    }
+    
+    .problem-box h3, .solution-box h3 {
+      color: var(--dark-blue);
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .problem-list, .solution-list {
+      list-style: none;
+    }
+    
+    .problem-list li, .solution-list li {
+      margin-bottom: 1rem;
+      padding-left: 2rem;
       position: relative;
     }
-    nav ul li a {
-      text-decoration: none;
-      color: var(--dark-blue);
-      font-weight: 600;
-      padding: 0.5rem 0.7rem;
-      border-radius: 5px;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      display: inline-block;
+    
+    .problem-list li::before {
+      content: '❗';
+      position: absolute;
+      left: 0;
+      color: var(--danger);
     }
-    nav ul li a:hover,
-    nav ul li a:focus {
+    
+    .solution-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--success);
+      font-weight: bold;
+    }
+    
+    .features-section {
+      margin-bottom: 3rem;
+    }
+    
+    .features-section h2 {
+      color: var(--dark-blue);
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    
+    .feature-card {
+      background-color: var(--white);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-top: 4px solid var(--dark-blue);
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .feature-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background-color: var(--light-blue);
+      color: var(--dark-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin: 0 auto 1.5rem;
+    }
+    
+    .feature-card h3 {
+      color: var(--dark-blue);
+      margin-bottom: 1rem;
+    }
+    
+    .feature-card p {
+      color: #666;
+    }
+    
+    .stats-section {
+      background: linear-gradient(135deg, var(--light-blue), var(--dark-blue));
+      color: white;
+      padding: 3rem 2rem;
+      border-radius: 10px;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+    
+    .stats-section h2 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+    
+    .stat-item {
+      padding: 1.5rem;
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+    
+    .cta-section {
+      text-align: center;
+      padding: 2rem;
+      background-color: var(--ash);
+      border-radius: 10px;
+    }
+    
+    .cta-section h2 {
+      color: var(--dark-blue);
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .cta-section p {
+      color: #666;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      padding: 0.8rem 2rem;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
       background-color: var(--dark-blue);
       color: var(--white);
-      outline: none;
+      border: none;
     }
-    nav ul li a::after {
-      content: '';
-      display: block;
-      height: 3px;
-      background: var(--dark-blue);
-      width: 0;
-      transition: width 0.3s ease;
-      border-radius: 2px;
-      margin-top: 3px;
+    
+    .btn-primary:hover {
+      background-color: var(--btn-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
-    nav ul li a:hover::after,
-    nav ul li a:focus::after {
-      width: 100%;
-    }
-    main {
-      max-width: 900px;
-      margin: 3rem auto;
-      background-color: var(--white);
-      padding: 2rem 2.5rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    h1 {
+    
+    .btn-secondary {
+      background-color: transparent;
       color: var(--dark-blue);
-      font-size: 2.4rem;
-      margin-bottom: 1rem;
-      text-align: center;
+      border: 2px solid var(--dark-blue);
     }
-    p {
-      font-size: 1.1rem;
-      margin-bottom: 1.3rem;
-      color: #444;
-      text-align: justify;
+    
+    .btn-secondary:hover {
+      background-color: rgba(51, 87, 164, 0.1);
+      transform: translateY(-2px);
     }
-    /* Footer */
+    
     footer {
-      background-color: var(--light-blue);
       text-align: center;
-      padding: 1rem 0;
-      color: var(--dark-blue);
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin-top: 4rem;
-      user-select: none;
+      padding: 2rem 1rem;
+      background-color: var(--white);
+      border-top: 2px solid var(--light-blue);
+      margin-top: 3rem;
     }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .footer-logo {
+      font-weight: 700;
+      font-size: 2rem;
+      color: var(--dark-blue);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+    
+    .footer-links a {
+      color: var(--dark-blue);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+      color: var(--btn-hover);
+      text-decoration: underline;
+    }
+    
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--light-blue);
+      color: var(--dark-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .social-links a:hover {
+      background-color: var(--dark-blue);
+      color: white;
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 1.5rem;
+    }
+    
+    @media (max-width: 900px) {
+      .mission-section {
+        grid-template-columns: 1fr;
+      }
+      
+      .problem-solution {
+        grid-template-columns: 1fr;
+      }
+      
+      .mission-image {
+        order: -1;
+        height: 250px;
+      }
+    }
+    
     @media (max-width: 768px) {
-      nav .container {
+      .about-header h1 {
+        font-size: 2.2rem;
+      }
+      
+      .about-header p {
+        font-size: 1.1rem;
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .cta-buttons {
         flex-direction: column;
-        gap: 0.8rem;
+        align-items: center;
       }
-      nav ul {
-        flex-wrap: wrap;
+      
+      .btn {
+        width: 100%;
+        max-width: 250px;
         justify-content: center;
-        gap: 1rem;
       }
-      main {
-        margin: 2rem 1rem;
-        padding: 1.5rem 1.5rem;
+      
+      .user-actions .profile span {
+        display: none;
       }
-      h1 {
+    }
+    
+    @media (max-width: 480px) {
+      header {
+        padding: 0.8rem;
+      }
+      
+      header .logo {
+        font-size: 1.5rem;
+      }
+      
+      .about-header {
+        padding: 2rem 1rem;
+      }
+      
+      .about-header h1 {
         font-size: 1.8rem;
+      }
+      
+      .about-content {
+        padding: 2rem 1rem;
+      }
+      
+      .mission-content h2 {
+        font-size: 1.6rem;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .footer-links {
+        flex-direction: column;
+        gap: 1rem;
       }
     }
   </style>
 </head>
 <body>
-  <nav role="navigation" aria-label="Primary Navigation">
-    <div class="container">
-      <div class="logo" tabindex="0">WorkBridge</div>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html" aria-current="page">About</a></li>
-        <li><a href="search.html">Find Jobs/Services</a></li>
-        <li><a href="post-job.html">Post Job/Service</a></li>
-        <li><a href="dashboard.html">Dashboard</a></li>
-        <li><a href="notifications.html">Notifications</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="terms.html">Terms & Privacy</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="logout.html">Logout</a></li>
-      </ul>
+  <!-- Header -->
+  <header>
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div class="logo">
+      <i class="fas fa-bridge"></i> WorkBridge
     </div>
-  </nav>
+    <div class="user-actions">
+      <div class="notification-badge" onclick="showNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="badge">3</span>
+      </div>
+      <div class="profile" onclick="toggleProfileMenu()">
+        <div class="profile-img">TS</div>
+        <span>Turan Smith</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </header>
 
-  <main role="main">
-    <h1>About WorkBridge</h1>
-    <p>Many workers and freelancers in Bangladesh struggle to find reliable job opportunities because existing platforms mainly focus on white-collar jobs. Informal workers often rely on word-of-mouth or social media, which is unorganized and unsafe.</p>
-    <p>WorkBridge is a decentralized web application designed to connect job seekers and service providers directly with employers in a simple, transparent, and secure way. Users can create detailed profiles, post jobs or services, search listings by location and skills, and communicate directly without intermediaries.</p>
-    <p>This platform helps open opportunities for more people, especially informal workers, and supports businesses by making hiring easier and more trustworthy. Challenges include verifying users and encouraging adoption in areas with limited internet access.</p>
-    <p>Despite challenges, WorkBridge aims to improve employment opportunities and support Bangladesh’s growing workforce by leveraging technology and community engagement.</p>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <h2><i class="fas fa-bars"></i> Menu</h2>
+    <ul>
+      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="about.html" class="active"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="search.html"><i class="fas fa-search"></i> Find Jobs/Services</a></li>
+      <li><a href="post-job.html"><i class="fas fa-bullhorn"></i> Post Job/Service</a></li>
+      <li><a href="dashboard.html"><i class="fas fa-chart-bar"></i> Dashboard</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="messages.html"><i class="fas fa-envelope"></i> Messages</a></li>
+      <li><a href="saved-jobs.html"><i class="fas fa-bookmark"></i> Saved Jobs</a></li>
+      <li><a href="applications.html"><i class="fas fa-file-alt"></i> Applications</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="terms.html"><i class="fas fa-file-contract"></i> Terms & Privacy</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="login.html" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+  <!-- Main Content -->
+  <main>
+    <div class="about-container">
+      <div class="about-header">
+        <h1>About WorkBridge</h1>
+        <p>Empowering Bangladesh's workforce through technology and opportunity</p>
+      </div>
+      
+      <div class="about-content">
+        <section class="mission-section">
+          <div class="mission-content">
+            <h2>Our Mission</h2>
+            <p>WorkBridge is a decentralized web application designed to connect job seekers and service providers directly with employers in a simple, transparent, and secure way. We're bridging the gap between opportunity and talent in Bangladesh's growing economy.</p>
+            <p>Our platform helps open opportunities for more people, especially informal workers, and supports businesses by making hiring easier and more trustworthy.</p>
+          </div>
+          <div class="mission-image">
+            <i class="fas fa-hands-helping"></i>
+          </div>
+        </section>
+        
+        <section class="problem-solution">
+          <div class="problem-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> The Problem</h3>
+            <ul class="problem-list">
+              <li>Workers and freelancers in Bangladesh struggle to find reliable job opportunities</li>
+              <li>Existing platforms mainly focus on white-collar jobs</li>
+              <li>Informal workers rely on word-of-mouth or social media, which is unorganized and unsafe</li>
+              <li>Limited access to verified opportunities and secure payment systems</li>
+            </ul>
+          </div>
+          
+          <div class="solution-box">
+            <h3><i class="fas fa-lightbulb"></i> Our Solution</h3>
+            <ul class="solution-list">
+              <li>Create detailed profiles showcasing skills and experience</li>
+              <li>Post jobs or services with transparent requirements</li>
+              <li>Search listings by location and specific skills</li>
+              <li>Communicate directly without intermediaries</li>
+              <li>Secure payment and verification systems</li>
+            </ul>
+          </div>
+        </section>
+        
+        <section class="features-section">
+          <h2>How WorkBridge Works</h2>
+          <div class="features-grid">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fas fa-user-plus"></i>
+              </div>
+              <h3>Create Profile</h3>
+              <p>Sign up and create a detailed profile showcasing your skills, experience, and portfolio.</p>
+            </div>
+            
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fas fa-search"></i>
+              </div>
+              <h3>Find Opportunities</h3>
+              <p>Browse available jobs or services that match your skills and preferences.</p>
+            </div>
+            
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fas fa-handshake"></i>
+              </div>
+              <h3>Connect & Work</h3>
+              <p>Communicate with clients, agree on terms, and complete the work successfully.</p>
+            </div>
+          </div>
+        </section>
+        
+        <section class="stats-section">
+          <h2>Our Impact</h2>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-number">10,000+</div>
+              <div class="stat-label">Active Users</div>
+            </div>
+            
+            <div class="stat-item">
+              <div class="stat-number">5,000+</div>
+              <div class="stat-label">Jobs Completed</div>
+            </div>
+            
+            <div class="stat-item">
+              <div class="stat-number">200+</div>
+              <div class="stat-label">Cities Covered</div>
+            </div>
+            
+            <div class="stat-item">
+              <div class="stat-number">98%</div>
+              <div class="stat-label">Satisfaction Rate</div>
+            </div>
+          </div>
+        </section>
+        
+        <section class="cta-section">
+          <h2>Join WorkBridge Today</h2>
+          <p>Become part of Bangladesh's most trusted platform connecting workers with opportunities</p>
+          <div class="cta-buttons">
+            <a href="register.html" class="btn btn-primary">
+              <i class="fas fa-user-plus"></i> Sign Up Now
+            </a>
+            <a href="contact.html" class="btn btn-secondary">
+              <i class="fas fa-envelope"></i> Contact Us
+            </a>
+          </div>
+        </section>
+      </div>
+    </div>
   </main>
 
-  <footer role="contentinfo">
-    &copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <i class="fas fa-bridge"></i> WorkBridge
+      </div>
+      
+      <div class="footer-links">
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact</a>
+        <a href="terms.html">Terms & Privacy</a>
+        <a href="help.html">Help Center</a>
+      </div>
+      
+      <div class="social-links">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+      
+      <div class="copyright">
+        &copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh
+      </div>
+    </div>
   </footer>
+
+  <script>
+    // DOM Elements
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const logoutLink = document.getElementById('logout-link');
+    
+    // Toggle sidebar menu
+    function toggleMenu() {
+      if (sidebar.style.left === '0px') {
+        sidebar.style.left = '-250px';
+        overlay.style.display = 'none';
+      } else {
+        sidebar.style.left = '0px';
+        overlay.style.display = 'block';
+      }
+    }
+    
+    // Show notifications
+    function showNotifications() {
+      // In a real app, this would show notifications
+      alert("You have 3 unread notifications");
+    }
+    
+    // Toggle profile menu (would be implemented with a dropdown)
+    function toggleProfileMenu() {
+      // In a real app, this would toggle a profile dropdown
+      alert("Profile menu would open here");
+    }
+    
+    // Handle logout
+    logoutLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      // In a real app, this would log the user out
+      alert("You have been logged out successfully");
+    });
+  </script>
 </body>
 </html>
