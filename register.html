@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Register - WorkBridge</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --light-blue: #a8c0ff;
@@ -11,7 +12,11 @@
       --white: #ffffff;
       --dark-blue: #3357a4;
       --gray-dark: #3a3a3a;
-      --error-red: #d9534f;
+      --btn-hover: #274a85;
+      --success: #4caf50;
+      --warning: #ff9800;
+      --danger: #f44336;
+      --info: #2196f3;
     }
     * {
       margin: 0;
@@ -23,232 +28,980 @@
       background-color: var(--ash);
       color: var(--gray-dark);
       line-height: 1.6;
-    }
-    nav {
-      background-color: var(--light-blue);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    nav .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.8rem 1rem;
-    }
-    nav .logo {
-      font-weight: 700;
-      font-size: 1.8rem;
-      color: var(--dark-blue);
-      letter-spacing: 2px;
-      cursor: pointer;
-      user-select: none;
-    }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 1.5rem;
-    }
-    nav ul li a {
-      text-decoration: none;
-      color: var(--dark-blue);
-      font-weight: 600;
-      padding: 0.5rem 0.7rem;
-      border-radius: 5px;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      display: inline-block;
-      position: relative;
-    }
-    nav ul li a:hover,
-    nav ul li a:focus {
-      background-color: var(--dark-blue);
-      color: var(--white);
-      outline: none;
-    }
-    nav ul li a::after {
-      content: '';
-      display: block;
-      height: 3px;
-      background: var(--dark-blue);
-      width: 0;
-      transition: width 0.3s ease;
-      border-radius: 2px;
-      margin-top: 3px;
-    }
-    nav ul li a:hover::after,
-    nav ul li a:focus::after {
-      width: 100%;
-    }
-    nav ul li a[aria-current="page"] {
-      background-color: var(--dark-blue);
-      color: var(--white);
-      pointer-events: none;
-    }
-    main {
-      max-width: 480px;
-      margin: 3rem auto;
-      background-color: var(--white);
-      padding: 2rem 2.5rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    h1 {
-      color: var(--dark-blue);
-      font-size: 2.2rem;
-      margin-bottom: 1.5rem;
-      text-align: center;
-    }
-    form {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      gap: 1.1rem;
     }
-    label {
-      font-weight: 600;
-      margin-bottom: 0.3rem;
-      display: block;
-      color: var(--dark-blue);
+    
+    /* Header */
+    header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:sticky;
+      top:0;
+      z-index:1000;
+      background-color:var(--light-blue);
+      padding:0.8rem 1.5rem;
+      box-shadow:0 2px 5px rgba(0,0,0,0.1);
     }
-    input, select {
-      padding: 0.6rem 0.8rem;
-      border: 1.5px solid #bbb;
-      border-radius: 5px;
-      font-size: 1rem;
-      transition: border-color 0.3s ease;
-      width: 100%;
+
+    header .menu-btn {
+      font-size:1.5rem;
+      background:none;
+      border:none;
+      cursor:pointer;
+      color:var(--dark-blue);
     }
-    input:focus, select:focus {
-      border-color: var(--dark-blue);
-      outline: none;
-      box-shadow: 0 0 5px var(--light-blue);
-    }
-    .radio-group {
+
+    header .logo {
+      font-weight:700;
+      font-size:1.8rem;
+      color:var(--dark-blue);
+      letter-spacing:2px;
+      cursor:pointer;
+      user-select:none;
       display: flex;
-      gap: 1.5rem;
       align-items: center;
+      gap: 0.5rem;
     }
-    .radio-group label {
-      font-weight: normal;
-      color: var(--gray-dark);
-      margin-bottom: 0;
+
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-actions .profile {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       cursor: pointer;
     }
+
+    .user-actions .profile-img {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background-color: var(--dark-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      position:fixed;
+      top:0;
+      left:-250px;
+      width:250px;
+      height:100%;
+      background-color:var(--white);
+      box-shadow:2px 0 5px rgba(0,0,0,0.2);
+      padding:2rem 1rem;
+      transition:left 0.3s ease;
+      z-index:1001;
+      overflow-y:auto;
+    }
+
+    .sidebar h2 {
+      margin-bottom:1.5rem;
+      color:var(--dark-blue);
+      text-align:center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar ul { list-style:none; }
+    .sidebar ul li { margin-bottom:1rem; }
+    .sidebar ul li a {
+      text-decoration:none;
+      color:var(--dark-blue);
+      font-weight:600;
+      display:flex;
+      align-items:center;
+      gap:0.5rem;
+      padding:0.6rem 0.8rem;
+      border-radius:5px;
+      transition:background-color 0.3s ease, color 0.3s ease;
+    }
+    .sidebar ul li a.active,
+    .sidebar ul li a:hover { background-color:var(--dark-blue); color:var(--white); }
+
+    .overlay {
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.3);
+      display:none;
+      z-index:100;
+    }
+    
+    /* Main Content */
+    main {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+    
+    .register-container {
+      display: flex;
+      max-width: 1000px;
+      width: 100%;
+      background-color: var(--white);
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    
+    .register-left {
+      flex: 1;
+      background: linear-gradient(135deg, var(--light-blue), var(--dark-blue));
+      color: white;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .register-left::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .register-left::after {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      left: -80px;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .register-left h2 {
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .register-left p {
+      margin-bottom: 1.5rem;
+      opacity: 0.9;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .benefits-list {
+      list-style: none;
+      margin-top: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .benefits-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+    
+    .benefits-list i {
+      background-color: rgba(255, 255, 255, 0.2);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .register-right {
+      flex: 1;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .register-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .register-header h1 {
+      color: var(--dark-blue);
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .register-header p {
+      color: #666;
+    }
+    
+    .register-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .form-group label {
+      font-weight: 600;
+      color: var(--dark-blue);
+      font-size: 0.9rem;
+    }
+    
+    .input-with-icon {
+      position: relative;
+    }
+    
+    .input-with-icon i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #777;
+    }
+    
+    .input-with-icon input, 
+    .input-with-icon select {
+      padding-left: 40px;
+    }
+    
+    .form-group input,
+    .form-group select {
+      padding: 0.8rem 1rem;
+      border: 1.5px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--dark-blue);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(51, 87, 164, 0.2);
+    }
+    
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #777;
+      cursor: pointer;
+    }
+    
+    .user-type-selector {
+      display: flex;
+      gap: 1rem;
+      margin: 0.5rem 0;
+    }
+    
+    .user-type-btn {
+      flex: 1;
+      padding: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .user-type-btn:hover {
+      border-color: var(--light-blue);
+    }
+    
+    .user-type-btn.active {
+      border-color: var(--dark-blue);
+      background-color: rgba(51, 87, 164, 0.1);
+    }
+    
+    .user-type-btn i {
+      font-size: 1.5rem;
+      color: var(--dark-blue);
+      margin-bottom: 0.5rem;
+    }
+    
+    .user-type-btn h3 {
+      color: var(--dark-blue);
+      margin-bottom: 0.3rem;
+    }
+    
+    .user-type-btn p {
+      font-size: 0.8rem;
+      color: #666;
+    }
+    
+    .skills-input-container {
+      position: relative;
+    }
+    
+    .skills-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    
+    .skill-tag {
+      background-color: var(--light-blue);
+      color: var(--dark-blue);
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    
+    .skill-tag .remove-skill {
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    
+    .password-strength {
+      margin-top: 0.5rem;
+    }
+    
+    .password-strength-bar {
+      height: 5px;
+      background-color: #eee;
+      border-radius: 3px;
+      margin-bottom: 0.3rem;
+      overflow: hidden;
+    }
+    
+    .password-strength-fill {
+      height: 100%;
+      width: 0;
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+    
+    .password-strength-text {
+      font-size: 0.8rem;
+      color: #666;
+    }
+    
+    .terms-agreement {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+    
+    .terms-agreement input {
+      margin-top: 0.2rem;
+    }
+    
+    .terms-agreement label {
+      font-size: 0.9rem;
+      font-weight: normal;
+      color: #666;
+    }
+    
+    .terms-agreement a {
+      color: var(--dark-blue);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .terms-agreement a:hover {
+      text-decoration: underline;
+    }
+    
     .btn-primary {
       background-color: var(--dark-blue);
       color: var(--white);
-      padding: 0.75rem 2rem;
-      font-size: 1.1rem;
+      padding: 0.8rem 2rem;
+      font-size: 1rem;
       border: none;
-      border-radius: 30px;
+      border-radius: 5px;
       cursor: pointer;
-      font-weight: 700;
-      box-shadow: 0 4px 8px rgba(51,87,164,0.4);
+      font-weight: 600;
       transition: background-color 0.3s ease;
-      margin-top: 1rem;
-      align-self: center;
       width: 100%;
-      max-width: 200px;
     }
+    
     .btn-primary:hover,
     .btn-primary:focus {
-      background-color: #274a85;
+      background-color: var(--btn-hover);
       outline: none;
     }
-    .form-note {
+    
+    .btn-primary:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .form-footer {
+      text-align: center;
+      margin-top: 1.5rem;
       font-size: 0.9rem;
       color: #666;
-      margin-top: 0.8rem;
-      text-align: center;
     }
+    
+    .form-footer a {
+      color: var(--dark-blue);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .form-footer a:hover {
+      text-decoration: underline;
+    }
+    
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--success);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 5px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 1000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .toast.error {
+      background-color: var(--danger);
+    }
+    
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      background-color: var(--white);
+      border-top: 2px solid var(--light-blue);
+      font-size: 0.9rem;
+    }
+    
+    footer p {
+      margin-bottom: 0.5rem;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    
+    .footer-links a {
+      color: var(--dark-blue);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+      color: #274a85;
+      text-decoration: underline;
+    }
+    
+    @media (max-width: 900px) {
+      .register-container {
+        flex-direction: column;
+        max-width: 500px;
+      }
+      
+      .register-left {
+        padding: 2rem;
+        text-align: center;
+      }
+      
+      .register-left h2 {
+        font-size: 1.8rem;
+      }
+      
+      .benefits-list {
+        text-align: left;
+      }
+    }
+    
     @media (max-width: 480px) {
-      main {
-        margin: 2rem 1rem;
-        padding: 1.5rem 1.5rem;
+      header {
+        padding: 0.8rem;
+      }
+      
+      header .logo {
+        font-size: 1.5rem;
+      }
+      
+      .register-left, .register-right {
+        padding: 1.5rem;
+      }
+      
+      .user-type-selector {
+        flex-direction: column;
+      }
+      
+      .user-actions .profile span {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
-  <nav role="navigation" aria-label="Primary Navigation">
-    <div class="container">
-      <div class="logo" tabindex="0">WorkBridge</div>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="search.html">Find Jobs/Services</a></li>
-        <li><a href="post-job.html">Post Job/Service</a></li>
-        <li><a href="dashboard.html">Dashboard</a></li>
-        <li><a href="notifications.html">Notifications</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="terms.html">Terms & Privacy</a></li>
-        <li><a href="register.html" aria-current="page">Register</a></li>
-        <li><a href="login.html">Login</a></li>
-      </ul>
+  <!-- Header -->
+  <header>
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div class="logo">
+      <i class="fas fa-bridge"></i> WorkBridge
     </div>
-  </nav>
+    <div class="user-actions">
+      <div class="profile" onclick="toggleProfileMenu()">
+        <div class="profile-img">GS</div>
+        <span>Guest User</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </header>
 
-  <main role="main">
-    <h1>Create Your Account</h1>
-    <form action="#" method="post" novalidate>
-      <label for="user-type">I am a:</label>
-      <select id="user-type" name="user-type" required>
-        <option value="" disabled selected>Select user type</option>
-        <option value="worker">Worker / Freelancer</option>
-        <option value="employer">Employer / Business</option>
-      </select>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <h2><i class="fas fa-bars"></i> Menu</h2>
+    <ul>
+      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="search.html"><i class="fas fa-search"></i> Find Jobs/Services</a></li>
+      <li><a href="post-job.html"><i class="fas fa-bullhorn"></i> Post Job/Service</a></li>
+      <li><a href="dashboard.html"><i class="fas fa-chart-bar"></i> Dashboard</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="messages.html"><i class="fas fa-envelope"></i> Messages</a></li>
+      <li><a href="saved-jobs.html"><i class="fas fa-bookmark"></i> Saved Jobs</a></li>
+      <li><a href="applications.html"><i class="fas fa-file-alt"></i> Applications</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="terms.html"><i class="fas fa-file-contract"></i> Terms & Privacy</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="register.html" class="active"><i class="fas fa-user-plus"></i> Register</a></li>
+      <li><a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+    </ul>
+  </div>
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
-      <label for="fullname">Full Name</label>
-      <input type="text" id="fullname" name="fullname" placeholder="Your full name" required autocomplete="name" />
-
-      <label for="email">Email Address</label>
-      <input type="email" id="email" name="email" placeholder="example@mail.com" required autocomplete="email" />
-
-      <label for="phone">Phone Number</label>
-      <input type="tel" id="phone" name="phone" placeholder="+880 1XXXXXXXXX" pattern="[+]{0,1}[0-9]{10,14}" autocomplete="tel" />
-
-      <label for="skills">Skills (for workers/freelancers)</label>
-      <input type="text" id="skills" name="skills" placeholder="e.g. Carpenter, Electrician, Designer" />
-
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" placeholder="Create a password" required autocomplete="new-password" minlength="6" />
-
-      <label for="confirm-password">Confirm Password</label>
-      <input type="password" id="confirm-password" name="confirm-password" placeholder="Re-enter your password" required autocomplete="new-password" minlength="6" />
-
-      <button type="submit" class="btn-primary">Register</button>
-
-      <p class="form-note">Already have an account? <a href="login.html">Login here</a>.</p>
-    </form>
+  <!-- Main Content -->
+  <main>
+    <div class="register-container">
+      <div class="register-left">
+        <h2>Join WorkBridge Today</h2>
+        <p>Create your account and start connecting with thousands of professionals and opportunities in Bangladesh's growing job market.</p>
+        
+        <ul class="benefits-list">
+          <li>
+            <i class="fas fa-briefcase"></i>
+            <span>Find jobs or services that match your skills</span>
+          </li>
+          <li>
+            <i class="fas fa-users"></i>
+            <span>Connect with trusted professionals</span>
+          </li>
+          <li>
+            <i class="fas fa-shield-alt"></i>
+            <span>Secure and reliable platform</span>
+          </li>
+          <li>
+            <i class="fas fa-rocket"></i>
+            <span>Grow your career or business</span>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="register-right">
+        <div class="register-header">
+          <h1>Create Your Account</h1>
+          <p>Join thousands of professionals on WorkBridge</p>
+        </div>
+        
+        <form class="register-form" id="registerForm" novalidate>
+          <div class="form-group">
+            <label>I want to join as:</label>
+            <div class="user-type-selector">
+              <div class="user-type-btn active" data-type="worker" onclick="selectUserType('worker')">
+                <i class="fas fa-user-tie"></i>
+                <h3>Worker</h3>
+                <p>Find jobs & projects</p>
+              </div>
+              <div class="user-type-btn" data-type="employer" onclick="selectUserType('employer')">
+                <i class="fas fa-briefcase"></i>
+                <h3>Employer</h3>
+                <p>Hire professionals</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="fullname">Full Name</label>
+            <div class="input-with-icon">
+              <i class="fas fa-user"></i>
+              <input type="text" id="fullname" name="fullname" placeholder="Your full name" required autocomplete="name" />
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <div class="input-with-icon">
+              <i class="fas fa-envelope"></i>
+              <input type="email" id="email" name="email" placeholder="example@mail.com" required autocomplete="email" />
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <div class="input-with-icon">
+              <i class="fas fa-phone"></i>
+              <input type="tel" id="phone" name="phone" placeholder="+880 1XXXXXXXXX" pattern="[+]{0,1}[0-9]{10,14}" autocomplete="tel" />
+            </div>
+          </div>
+          
+          <div class="form-group" id="skills-container">
+            <label for="skills">Your Skills (comma separated)</label>
+            <div class="input-with-icon">
+              <i class="fas fa-tools"></i>
+              <input type="text" id="skills" name="skills" placeholder="e.g. Carpenter, Electrician, Designer" />
+            </div>
+            <div class="skills-tags" id="skills-tags"></div>
+          </div>
+          
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-with-icon">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="password" name="password" placeholder="Create a strong password" required autocomplete="new-password" minlength="6" onkeyup="checkPasswordStrength()" />
+              <span class="password-toggle" onclick="togglePassword('password')">
+                <i class="fas fa-eye"></i>
+              </span>
+            </div>
+            <div class="password-strength">
+              <div class="password-strength-bar">
+                <div class="password-strength-fill" id="password-strength-bar"></div>
+              </div>
+              <div class="password-strength-text" id="password-strength-text">Password strength</div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <div class="input-with-icon">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="confirm-password" name="confirm-password" placeholder="Re-enter your password" required autocomplete="new-password" minlength="6" onkeyup="validatePasswordMatch()" />
+              <span class="password-toggle" onclick="togglePassword('confirm-password')">
+                <i class="fas fa-eye"></i>
+              </span>
+            </div>
+            <div id="password-match-message" class="password-strength-text"></div>
+          </div>
+          
+          <div class="terms-agreement">
+            <input type="checkbox" id="terms" name="terms" required />
+            <label for="terms">I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a></label>
+          </div>
+          
+          <button type="submit" class="btn-primary" id="register-btn">Create Account</button>
+        </form>
+        
+        <div class="form-footer">
+          <p>Already have an account? <a href="login.html">Login here</a></p>
+        </div>
+      </div>
+    </div>
   </main>
 
-  <footer role="contentinfo">
-    &copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh
+  <footer>
+    <p>&copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh</p>
+    <div class="footer-links">
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact</a>
+      <a href="terms.html">Terms & Privacy</a>
+      <a href="help.html">Help Center</a>
+    </div>
   </footer>
 
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toast-message">Registration successful! Redirecting...</span>
+  </div>
+
   <script>
-    const registerForm = document.getElementById("register-form");
-
-    registerForm.addEventListener("submit", function (event) {
-      event.preventDefault();
-
-      const password = document.getElementById("password").value;
-      const confirmPassword = document.getElementById("confirm-password").value;
-
-      if (password !== confirmPassword) {
-        alert("⚠️ Passwords do not match. Please try again.");
+    // DOM Elements
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const toast = document.getElementById('toast');
+    const registerForm = document.getElementById('registerForm');
+    const userTypeBtns = document.querySelectorAll('.user-type-btn');
+    const skillsInput = document.getElementById('skills');
+    const skillsTags = document.getElementById('skills-tags');
+    const skillsContainer = document.getElementById('skills-container');
+    const registerBtn = document.getElementById('register-btn');
+    
+    // Selected user type
+    let selectedUserType = 'worker';
+    
+    // Toggle sidebar menu
+    function toggleMenu() {
+      if (sidebar.style.left === '0px') {
+        sidebar.style.left = '-250px';
+        overlay.style.display = 'none';
+      } else {
+        sidebar.style.left = '0px';
+        overlay.style.display = 'block';
+      }
+    }
+    
+    // Toggle profile menu (would be implemented with a dropdown)
+    function toggleProfileMenu() {
+      showToast('Please register or login to access profile settings');
+    }
+    
+    // Show toast notification
+    function showToast(message, isError = false) {
+      const toastMessage = document.getElementById('toast-message');
+      toastMessage.textContent = message;
+      
+      if (isError) {
+        toast.classList.add('error');
+      } else {
+        toast.classList.remove('error');
+      }
+      
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+    
+    // Select user type
+    function selectUserType(type) {
+      selectedUserType = type;
+      
+      // Update UI
+      userTypeBtns.forEach(btn => {
+        if (btn.dataset.type === type) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      
+      // Show/hide skills based on user type
+      if (type === 'worker') {
+        skillsContainer.style.display = 'flex';
+      } else {
+        skillsContainer.style.display = 'none';
+      }
+    }
+    
+    // Toggle password visibility
+    function togglePassword(fieldId) {
+      const field = document.getElementById(fieldId);
+      const toggleIcon = field.parentNode.querySelector('.password-toggle i');
+      
+      if (field.type === 'password') {
+        field.type = 'text';
+        toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        field.type = 'password';
+        toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    }
+    
+    // Check password strength
+    function checkPasswordStrength() {
+      const password = document.getElementById('password').value;
+      const strengthBar = document.getElementById('password-strength-bar');
+      const strengthText = document.getElementById('password-strength-text');
+      
+      let strength = 0;
+      let message = '';
+      let color = '';
+      
+      if (password.length > 0) {
+        // Check password strength criteria
+        if (password.length < 6) {
+          strength = 20;
+          message = 'Too short';
+          color = '#f44336';
+        } else {
+          // Check for uppercase letters
+          if (password.match(/[A-Z]/)) strength += 20;
+          // Check for numbers
+          if (password.match(/[0-9]/)) strength += 20;
+          // Check for special characters
+          if (password.match(/[^A-Za-z0-9]/)) strength += 20;
+          // Check length
+          if (password.length >= 8) strength += 20;
+          
+          // Set message based on strength
+          if (strength <= 40) {
+            message = 'Weak';
+            color = '#f44336';
+          } else if (strength <= 60) {
+            message = 'Fair';
+            color = '#ff9800';
+          } else if (strength <= 80) {
+            message = 'Good';
+            color = '#2196f3';
+          } else {
+            message = 'Strong';
+            color = '#4caf50';
+          }
+        }
+      } else {
+        message = 'Password strength';
+        color = '#ddd';
+      }
+      
+      // Update UI
+      strengthBar.style.width = strength + '%';
+      strengthBar.style.backgroundColor = color;
+      strengthText.textContent = message;
+      strengthText.style.color = color;
+    }
+    
+    // Validate password match
+    function validatePasswordMatch() {
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+      const messageElement = document.getElementById('password-match-message');
+      
+      if (confirmPassword.length > 0) {
+        if (password === confirmPassword) {
+          messageElement.textContent = 'Passwords match';
+          messageElement.style.color = '#4caf50';
+        } else {
+          messageElement.textContent = 'Passwords do not match';
+          messageElement.style.color = '#f44336';
+        }
+      } else {
+        messageElement.textContent = '';
+      }
+    }
+    
+    // Handle skills input
+    skillsInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ',') {
+        e.preventDefault();
+        addSkillTag(this.value.trim().replace(',', ''));
+        this.value = '';
+      }
+    });
+    
+    skillsInput.addEventListener('blur', function() {
+      if (this.value.trim() !== '') {
+        addSkillTag(this.value.trim());
+        this.value = '';
+      }
+    });
+    
+    function addSkillTag(skill) {
+      if (skill === '') return;
+      
+      const tag = document.createElement('div');
+      tag.className = 'skill-tag';
+      tag.innerHTML = `
+        ${skill}
+        <span class="remove-skill" onclick="removeSkillTag(this)">×</span>
+      `;
+      
+      skillsTags.appendChild(tag);
+    }
+    
+    function removeSkillTag(element) {
+      element.parentNode.remove();
+    }
+    
+    // Form submission handler
+    registerForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Basic validation
+      const fullname = document.getElementById('fullname').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+      const terms = document.getElementById('terms').checked;
+      
+      if (!fullname || !email || !password || !confirmPassword) {
+        showToast('Please fill in all required fields', true);
         return;
       }
-
-      alert("🎉 Registration successful!");
-
-      // Redirect to login page after success
-      window.location.href = "login.html";
+      
+      if (!isValidEmail(email)) {
+        showToast('Please enter a valid email address', true);
+        return;
+      }
+      
+      if (password !== confirmPassword) {
+        showToast('Passwords do not match', true);
+        return;
+      }
+      
+      if (!terms) {
+        showToast('Please agree to the terms and conditions', true);
+        return;
+      }
+      
+      // Disable button during submission
+      registerBtn.disabled = true;
+      registerBtn.textContent = 'Creating Account...';
+      
+      // Simulate registration process
+      showToast('Registration successful! Redirecting...');
+      
+      // In a real app, this would submit to server and redirect on success
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 2000);
+    });
+    
+    // Email validation
+    function isValidEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+    
+    // Initialize registration page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set default user type
+      selectUserType('worker');
     });
   </script>
-</body>
-
 </body>
 </html>
