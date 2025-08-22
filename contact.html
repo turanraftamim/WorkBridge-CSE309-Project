@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Contact & Help - WorkBridge</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --light-blue: #a8c0ff;
@@ -12,6 +13,10 @@
       --dark-blue: #3357a4;
       --gray-dark: #3a3a3a;
       --btn-hover: #274a85;
+      --success: #4caf50;
+      --warning: #ff9800;
+      --danger: #f44336;
+      --info: #2196f3;
     }
 
     * {
@@ -28,64 +33,165 @@
       display: flex;
       flex-direction: column;
     }
-
-    nav {
-      background-color: var(--light-blue);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+    
+    /* Header */
+    header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:sticky;
+      top:0;
+      z-index:1000;
+      background-color:var(--light-blue);
+      padding:0.8rem 1.5rem;
+      box-shadow:0 2px 5px rgba(0,0,0,0.1);
     }
 
-    nav .container {
-      max-width: 1200px;
-      margin: 0 auto;
+    header .menu-btn {
+      font-size:1.5rem;
+      background:none;
+      border:none;
+      cursor:pointer;
+      color:var(--dark-blue);
+    }
+
+    header .logo {
+      font-weight:700;
+      font-size:1.8rem;
+      color:var(--dark-blue);
+      letter-spacing:2px;
+      cursor:pointer;
+      user-select:none;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 0.8rem 1rem;
+      gap: 0.5rem;
     }
 
-    nav .logo {
-      font-weight: 700;
-      font-size: 1.8rem;
-      color: var(--dark-blue);
-      letter-spacing: 2px;
-    }
-
-    nav ul {
-      list-style: none;
+    .user-actions {
       display: flex;
-      gap: 1.5rem;
+      align-items: center;
+      gap: 1rem;
     }
 
-    nav ul li a {
-      text-decoration: none;
-      color: var(--dark-blue);
-      font-weight: 600;
-      padding: 0.5rem 0.7rem;
-      border-radius: 5px;
-      transition: background-color 0.3s ease, color 0.3s ease;
+    .user-actions .notification-badge {
+      position: relative;
+      cursor: pointer;
     }
 
-    nav ul li a:hover,
-    nav ul li a:focus {
+    .user-actions .badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: var(--danger);
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .user-actions .profile {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .user-actions .profile-img {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
       background-color: var(--dark-blue);
-      color: var(--white);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      position:fixed;
+      top:0;
+      left:-250px;
+      width:250px;
+      height:100%;
+      background-color:var(--white);
+      box-shadow:2px 0 5px rgba(0,0,0,0.2);
+      padding:2rem 1rem;
+      transition:left 0.3s ease;
+      z-index:1001;
+      overflow-y:auto;
     }
 
-    nav ul li a[aria-current="page"] {
-      background-color: var(--dark-blue);
-      color: var(--white);
-      pointer-events: none;
+    .sidebar h2 {
+      margin-bottom:1.5rem;
+      color:var(--dark-blue);
+      text-align:center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
     }
 
+    .sidebar ul { list-style:none; }
+    .sidebar ul li { margin-bottom:1rem; }
+    .sidebar ul li a {
+      text-decoration:none;
+      color:var(--dark-blue);
+      font-weight:600;
+      display:flex;
+      align-items:center;
+      gap:0.5rem;
+      padding:0.6rem 0.8rem;
+      border-radius:5px;
+      transition:background-color 0.3s ease, color 0.3s ease;
+    }
+    .sidebar ul li a.active,
+    .sidebar ul li a:hover { background-color:var(--dark-blue); color:var(--white); }
+
+    .overlay {
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.3);
+      display:none;
+      z-index:100;
+    }
+
+    /* Main Content */
     .main-content {
+      flex-grow: 1;
       display: flex;
       gap: 2rem;
       padding: 2rem;
       justify-content: center;
       flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .page-header {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .page-header h1 {
+      color: var(--dark-blue);
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-header p {
+      color: #666;
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
     }
 
     .contact,
@@ -99,74 +205,307 @@
       flex: 1;
     }
 
-    h1 {
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
       color: var(--dark-blue);
-      font-size: 2rem;
-      margin-bottom: 1rem;
+    }
+
+    .section-header i {
+      font-size: 1.5rem;
+    }
+
+    .contact-methods {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-method {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       text-align: center;
+      padding: 1.5rem;
+      background-color: var(--ash);
+      border-radius: 8px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .contact-method:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .contact-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: var(--light-blue);
+      color: var(--dark-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .contact-method h3 {
+      color: var(--dark-blue);
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-method p {
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-method a {
+      color: var(--dark-blue);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .contact-method a:hover {
+      text-decoration: underline;
     }
 
     form {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 1.2rem;
     }
 
-    label {
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group label {
       font-weight: 600;
+      color: var(--dark-blue);
     }
 
-    input, textarea {
-      padding: 0.7rem 1rem;
-      border: 1.5px solid #bbb;
-      border-radius: 8px;
+    .input-with-icon {
+      position: relative;
+    }
+
+    .input-with-icon i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #777;
+    }
+
+    .input-with-icon input, 
+    .input-with-icon textarea,
+    .input-with-icon select {
+      padding-left: 40px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 0.8rem 1rem;
+      border: 1.5px solid #ddd;
+      border-radius: 5px;
       font-size: 1rem;
-      resize: vertical;
+      transition: all 0.3s ease;
+      width: 100%;
     }
 
-    input:focus, textarea:focus {
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
       border-color: var(--dark-blue);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(51, 87, 164, 0.2);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .btn-primary {
+      background-color: var(--dark-blue);
+      color: var(--white);
+      padding: 0.8rem 2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+      background-color: var(--btn-hover);
       outline: none;
     }
 
-    button {
-      background-color: var(--dark-blue);
-      color: var(--white);
-      padding: 0.8rem 1.5rem;
-      border: none;
-      border-radius: 30px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: var(--btn-hover);
+    .faq-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
 
     .faq-item {
-      margin-bottom: 1.5rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: all 0.3s ease;
     }
 
-    .faq-item h2 {
-      font-size: 1.1rem;
+    .faq-item.active {
+      border-color: var(--dark-blue);
+      box-shadow: 0 3px 8px rgba(51, 87, 164, 0.15);
+    }
+
+    .faq-question {
       background-color: var(--ash);
-      padding: 0.6rem 1rem;
-      border-radius: 6px;
+      padding: 1rem 1.5rem;
+      font-weight: 600;
       cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--dark-blue);
     }
 
-    .faq-item p {
-      display: none;
-      padding: 0.5rem 1rem;
+    .faq-question i {
+      transition: transform 0.3s ease;
+    }
+
+    .faq-item.active .faq-question i {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .faq-item.active .faq-answer {
+      padding: 1rem 1.5rem;
+      max-height: 300px;
+    }
+
+    .help-categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .help-category {
+      background-color: var(--ash);
+      padding: 1.5rem;
+      border-radius: 8px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .help-category:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .help-category i {
+      font-size: 2rem;
+      color: var(--dark-blue);
+      margin-bottom: 1rem;
+    }
+
+    .help-category h3 {
+      color: var(--dark-blue);
+      margin-bottom: 0.5rem;
+    }
+
+    .help-category p {
+      color: #666;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .help-category a {
+      color: var(--dark-blue);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .help-category a:hover {
+      text-decoration: underline;
     }
 
     footer {
-      background-color: var(--light-blue);
       text-align: center;
-      padding: 1rem;
+      padding: 1.5rem;
+      background-color: var(--white);
+      border-top: 2px solid var(--light-blue);
       font-size: 0.9rem;
-      margin-top: auto;
+    }
+
+    footer p {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .footer-links a {
+      color: var(--dark-blue);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: #274a85;
+      text-decoration: underline;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--success);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 5px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 1000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.error {
+      background-color: var(--danger);
     }
 
     @media (max-width: 1000px) {
@@ -180,85 +519,370 @@
         max-width: 700px;
       }
     }
+
+    @media (max-width: 768px) {
+      .contact-methods {
+        grid-template-columns: 1fr;
+      }
+      
+      .help-categories {
+        grid-template-columns: 1fr;
+      }
+      
+      .user-actions .profile span {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding: 0.8rem;
+      }
+      
+      header .logo {
+        font-size: 1.5rem;
+      }
+      
+      .main-content {
+        padding: 1rem;
+      }
+      
+      .contact, .help {
+        padding: 1.5rem;
+      }
+      
+      .page-header h1 {
+        font-size: 2rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <nav>
-    <div class="container">
-      <div class="logo">WorkBridge</div>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="search.html">Find Jobs/Services</a></li>
-        <li><a href="post-job.html">Post Job/Service</a></li>
-        <li><a href="dashboard.html">Dashboard</a></li>
-        <li><a href="notifications.html">Notifications</a></li>
-        <li><a href="contact.html" aria-current="page">Contact</a></li>
-        <li><a href="terms.html">Terms & Privacy</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="logout.html">Logout</a></li>
-      </ul>
+  <!-- Header -->
+  <header>
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div class="logo">
+      <i class="fas fa-bridge"></i> WorkBridge
     </div>
-  </nav>
+    <div class="user-actions">
+      <div class="notification-badge" onclick="showNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="badge">3</span>
+      </div>
+      <div class="profile" onclick="toggleProfileMenu()">
+        <div class="profile-img">TS</div>
+        <span>Turan Smith</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </header>
 
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <h2><i class="fas fa-bars"></i> Menu</h2>
+    <ul>
+      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="search.html"><i class="fas fa-search"></i> Find Jobs/Services</a></li>
+      <li><a href="post-job.html"><i class="fas fa-bullhorn"></i> Post Job/Service</a></li>
+      <li><a href="dashboard.html"><i class="fas fa-chart-bar"></i> Dashboard</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="contact.html" class="active"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="messages.html"><i class="fas fa-comments"></i> Messages</a></li>
+      <li><a href="saved-jobs.html"><i class="fas fa-bookmark"></i> Saved Jobs</a></li>
+      <li><a href="applications.html"><i class="fas fa-file-alt"></i> Applications</a></li>
+      <li><a href="terms.html"><i class="fas fa-file-contract"></i> Terms & Privacy</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="login.html" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+  <!-- Main Content -->
   <div class="main-content">
+    <div class="page-header">
+      <h1>Contact & Help Center</h1>
+      <p>We're here to help you with any questions or issues you might have</p>
+    </div>
+
     <!-- Left: Contact -->
     <div class="contact">
-      <h1>Contact Us</h1>
-      <form>
-        <label for="name">Full Name</label>
-        <input type="text" id="name" placeholder="Your name" required>
+      <div class="section-header">
+        <i class="fas fa-envelope"></i>
+        <h2>Contact Us</h2>
+      </div>
 
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="Your email" required>
+      <div class="contact-methods">
+        <div class="contact-method">
+          <div class="contact-icon">
+            <i class="fas fa-phone"></i>
+          </div>
+          <h3>Call Us</h3>
+          <p>+880 XXXX-XXXXXX</p>
+          <p>Mon-Fri, 9AM-5PM</p>
+        </div>
 
-        <label for="subject">Subject</label>
-        <input type="text" id="subject" placeholder="Subject" required>
+        <div class="contact-method">
+          <div class="contact-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <h3>Email Us</h3>
+          <p>support@workbridge.com</p>
+          <a href="mailto:support@workbridge.com">Send Email</a>
+        </div>
 
-        <label for="message">Message</label>
-        <textarea id="message" rows="5" placeholder="Write your message..." required></textarea>
+        <div class="contact-method">
+          <div class="contact-icon">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <h3>Visit Us</h3>
+          <p>123 Business District</p>
+          <p>Dhaka, Bangladesh</p>
+        </div>
+      </div>
 
-        <button type="submit">Send Message</button>
+      <form id="contactForm">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <div class="input-with-icon">
+            <i class="fas fa-user"></i>
+            <input type="text" id="name" placeholder="Your name" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <div class="input-with-icon">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="email" placeholder="Your email" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <div class="input-with-icon">
+            <i class="fas fa-tag"></i>
+            <select id="subject" required>
+              <option value="" disabled selected>Select a subject</option>
+              <option value="general">General Inquiry</option>
+              <option value="technical">Technical Support</option>
+              <option value="billing">Billing Issue</option>
+              <option value="suggestion">Suggestion</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message</label>
+          <div class="input-with-icon">
+            <i class="fas fa-comment"></i>
+            <textarea id="message" placeholder="Write your message..." required></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary">
+          <i class="fas fa-paper-plane"></i> Send Message
+        </button>
       </form>
     </div>
 
     <!-- Right: Help -->
     <div class="help">
-      <h1>Help / FAQ</h1>
-      <div class="faq-item">
-        <h2 tabindex="0" aria-expanded="false">How do I create a profile?</h2>
-        <p>Click "Sign Up" on the login page and fill out your details including skills, location, and contact info.</p>
+      <div class="section-header">
+        <i class="fas fa-question-circle"></i>
+        <h2>Help Center & FAQ</h2>
       </div>
-      <div class="faq-item">
-        <h2 tabindex="0" aria-expanded="false">How can I post a job or service?</h2>
-        <p>Go to "Post Job/Service", fill out the required information, and submit it.</p>
+
+      <div class="faq-container">
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            How do I create a profile? <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Click "Sign Up" on the login page and fill out your details including skills, location, and contact info. You can also sign up using your Google or Facebook account for faster registration.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            How can I post a job or service? <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Go to "Post Job/Service" from the main menu, fill out the required information including title, description, budget, and required skills. Once submitted, your posting will be reviewed and activated within 24 hours.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            How do I apply for a job? <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Browse jobs under "Find Jobs/Services", then click on a listing to view details. Click the "Apply Now" button to submit your application. You can include a cover letter and your portfolio if needed.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Who do I contact for support? <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Use the contact form on this page or email us directly at support@workbridge.com. We respond to all inquiries within 24–48 hours. For urgent matters, please call our support line.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            How do I reset my password? <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Click on "Forgot Password" on the login page. Enter your email address and we'll send you a link to reset your password. The link will expire after 24 hours for security reasons.</p>
+          </div>
+        </div>
       </div>
-      <div class="faq-item">
-        <h2 tabindex="0" aria-expanded="false">How do I apply for a job?</h2>
-        <p>Browse jobs under "Find Jobs/Services", then click on a listing to apply.</p>
-      </div>
-      <div class="faq-item">
-        <h2 tabindex="0" aria-expanded="false">Who do I contact for support?</h2>
-        <p>Use the contact form on the left. We respond within 24–48 hours.</p>
+
+      <div class="help-categories">
+        <div class="help-category">
+          <i class="fas fa-book"></i>
+          <h3>User Guides</h3>
+          <p>Step-by-step tutorials for using WorkBridge</p>
+          <a href="#">View Guides <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <div class="help-category">
+          <i class="fas fa-video"></i>
+          <h3>Video Tutorials</h3>
+          <p>Watch video guides for common tasks</p>
+          <a href="#">Watch Videos <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <div class="help-category">
+          <i class="fas fa-users"></i>
+          <h3>Community Forum</h3>
+          <p>Get help from other WorkBridge users</p>
+          <a href="#">Join Discussion <i class="fas fa-arrow-right"></i></a>
+        </div>
       </div>
     </div>
   </div>
 
   <footer>
-    &copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh
+    <p>&copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh</p>
+    <div class="footer-links">
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact</a>
+      <a href="terms.html">Terms & Privacy</a>
+      <a href="help.html">Help Center</a>
+    </div>
   </footer>
 
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toast-message">Your message has been sent successfully!</span>
+  </div>
+
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const faqs = document.querySelectorAll('.faq-item h2');
-      faqs.forEach(header => {
-        header.addEventListener('click', () => {
-          const content = header.nextElementSibling;
-          const expanded = header.getAttribute('aria-expanded') === 'true';
-          content.style.display = expanded ? 'none' : 'block';
-          header.setAttribute('aria-expanded', !expanded);
-        });
-      });
+    // DOM Elements
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const toast = document.getElementById('toast');
+    const contactForm = document.getElementById('contactForm');
+    const logoutLink = document.getElementById('logout-link');
+    
+    // Toggle sidebar menu
+    function toggleMenu() {
+      if (sidebar.style.left === '0px') {
+        sidebar.style.left = '-250px';
+        overlay.style.display = 'none';
+      } else {
+        sidebar.style.left = '0px';
+        overlay.style.display = 'block';
+      }
+    }
+    
+    // Show notifications
+    function showNotifications() {
+      showToast('Redirecting to notifications');
+      setTimeout(() => {
+        window.location.href = 'notifications.html';
+      }, 1000);
+    }
+    
+    // Toggle profile menu (would be implemented with a dropdown)
+    function toggleProfileMenu() {
+      showToast('Profile menu would open here');
+    }
+    
+    // Show toast notification
+    function showToast(message, isError = false) {
+      const toastMessage = document.getElementById('toast-message');
+      toastMessage.textContent = message;
+      
+      if (isError) {
+        toast.classList.add('error');
+      } else {
+        toast.classList.remove('error');
+      }
+      
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+    
+    // Toggle FAQ items
+    function toggleFaq(element) {
+      const faqItem = element.parentElement;
+      faqItem.classList.toggle('active');
+    }
+    
+    // Contact form submission
+    contactForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Basic validation
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const subject = document.getElementById('subject').value;
+      const message = document.getElementById('message').value;
+      
+      if (!name || !email || !subject || !message) {
+        showToast('Please fill in all fields', true);
+        return;
+      }
+      
+      if (!isValidEmail(email)) {
+        showToast('Please enter a valid email address', true);
+        return;
+      }
+      
+      // Simulate form submission
+      showToast('Your message has been sent successfully!');
+      
+      // Reset form
+      contactForm.reset();
+    });
+    
+    // Email validation
+    function isValidEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+    
+    // Handle logout
+    logoutLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      showToast('You have been logged out successfully');
+      // In a real app, this would redirect to login page after a delay
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 1500);
+    });
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add any initialization code here
     });
   </script>
 </body>

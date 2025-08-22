@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>WorkBridge - Connecting Bangladesh Workforce</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     /* Color palette */
     :root {
@@ -12,6 +13,11 @@
       --white: #ffffff;
       --dark-blue: #3357a4;
       --gray-dark: #3a3a3a;
+      --btn-hover: #274a85;
+      --success: #4caf50;
+      --warning: #ff9800;
+      --danger: #f44336;
+      --info: #2196f3;
     }
 
     /* Reset */
@@ -26,178 +32,884 @@
       background-color: var(--ash);
       color: var(--gray-dark);
       line-height: 1.6;
-    }
-
-    /* Navbar */
-    nav {
-      background-color: var(--light-blue);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    nav .container {
-      max-width: 1200px;
-      margin: 0 auto;
+      min-height: 100vh;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+    }
+    
+    /* Header */
+    header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:sticky;
+      top:0;
+      z-index:1000;
+      background-color:var(--light-blue);
+      padding:0.8rem 1.5rem;
+      box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    header .menu-btn {
+      font-size:1.5rem;
+      background:none;
+      border:none;
+      cursor:pointer;
+      color:var(--dark-blue);
+    }
+
+    header .logo {
+      font-weight:700;
+      font-size:1.8rem;
+      color:var(--dark-blue);
+      letter-spacing:2px;
+      cursor:pointer;
+      user-select:none;
+      display: flex;
       align-items: center;
-      padding: 0.8rem 1rem;
+      gap: 0.5rem;
     }
 
-    nav .logo {
-      font-weight: 700;
-      font-size: 1.8rem;
-      color: var(--dark-blue);
-      letter-spacing: 2px;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    nav ul {
-      list-style: none;
+    .user-actions {
       display: flex;
-      gap: 1.5rem;
+      align-items: center;
+      gap: 1rem;
     }
 
-    nav ul li {
+    .user-actions .notification-badge {
       position: relative;
+      cursor: pointer;
     }
 
-    nav ul li a {
-      text-decoration: none;
-      color: var(--dark-blue);
-      font-weight: 600;
-      padding: 0.5rem 0.7rem;
-      border-radius: 5px;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      display: inline-block;
+    .user-actions .badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: var(--danger);
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    nav ul li a:hover,
-    nav ul li a:focus {
+    .user-actions .profile {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .user-actions .profile-img {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
       background-color: var(--dark-blue);
-      color: var(--white);
-      outline: none;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      position:fixed;
+      top:0;
+      left:-250px;
+      width:250px;
+      height:100%;
+      background-color:var(--white);
+      box-shadow:2px 0 5px rgba(0,0,0,0.2);
+      padding:2rem 1rem;
+      transition:left 0.3s ease;
+      z-index:1001;
+      overflow-y:auto;
     }
 
-    /* Unique Nav Bar underline effect */
-    nav ul li a::after {
-      content: '';
-      display: block;
-      height: 3px;
-      background: var(--dark-blue);
-      width: 0;
-      transition: width 0.3s ease;
-      border-radius: 2px;
-      margin-top: 3px;
+    .sidebar h2 {
+      margin-bottom:1.5rem;
+      color:var(--dark-blue);
+      text-align:center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
     }
 
-    nav ul li a:hover::after,
-    nav ul li a:focus::after {
-      width: 100%;
+    .sidebar ul { list-style:none; }
+    .sidebar ul li { margin-bottom:1rem; }
+    .sidebar ul li a {
+      text-decoration:none;
+      color:var(--dark-blue);
+      font-weight:600;
+      display:flex;
+      align-items:center;
+      gap:0.5rem;
+      padding:0.6rem 0.8rem;
+      border-radius:5px;
+      transition:background-color 0.3s ease, color 0.3s ease;
+    }
+    .sidebar ul li a.active,
+    .sidebar ul li a:hover { background-color:var(--dark-blue); color:var(--white); }
+
+    .overlay {
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.3);
+      display:none;
+      z-index:100;
     }
 
     /* Hero Section */
-    header.hero {
-      background: linear-gradient(135deg, var(--light-blue), var(--ash));
+    .hero {
+      background: linear-gradient(135deg, var(--light-blue), var(--dark-blue));
+      padding: 5rem 1rem;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      left: -80px;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 2.5rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.8rem 2rem;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background-color: white;
+      color: var(--dark-blue);
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: rgba(255, 255, 255, 0.9);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+
+    .btn-secondary:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    /* Features Section */
+    .features {
+      padding: 5rem 1rem;
+      background-color: var(--white);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-header h2 {
+      color: var(--dark-blue);
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-header p {
+      color: #666;
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background-color: var(--ash);
+      padding: 2rem;
+      border-radius: 10px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .feature-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background-color: var(--light-blue);
+      color: var(--dark-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin: 0 auto 1.5rem;
+    }
+
+    .feature-card h3 {
+      color: var(--dark-blue);
+      margin-bottom: 1rem;
+    }
+
+    .feature-card p {
+      color: #666;
+    }
+
+    /* How It Works Section */
+    .how-it-works {
+      padding: 5rem 1rem;
+      background-color: var(--ash);
+    }
+
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .step {
+      background-color: var(--white);
+      padding: 2rem;
+      border-radius: 10px;
+      text-align: center;
+      flex: 1;
+      min-width: 250px;
+      max-width: 300px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--dark-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin: 0 auto 1rem;
+    }
+
+    .step h3 {
+      color: var(--dark-blue);
+      margin-bottom: 1rem;
+    }
+
+    .step p {
+      color: #666;
+    }
+
+    /* Stats Section */
+    .stats {
       padding: 4rem 1rem;
+      background: linear-gradient(135deg, var(--light-blue), var(--dark-blue));
+      color: white;
       text-align: center;
     }
 
-    header.hero h1 {
-      font-size: 2.8rem;
-      margin-bottom: 1rem;
-      color: var(--dark-blue);
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
     }
 
-    header.hero p {
-      font-size: 1.2rem;
-      max-width: 600px;
-      margin: 0 auto 2rem;
-      color: #444;
+    .stat-item {
+      padding: 1.5rem;
     }
 
-    header.hero .btn-primary {
-      background-color: var(--dark-blue);
-      color: var(--white);
-      padding: 0.75rem 2rem;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
+    .stat-number {
+      font-size: 2.5rem;
       font-weight: 700;
-      box-shadow: 0 4px 8px rgba(51,87,164,0.4);
-      transition: background-color 0.3s ease;
-      text-decoration: none;
-      display: inline-block;
+      margin-bottom: 0.5rem;
     }
 
-    header.hero .btn-primary:hover,
-    header.hero .btn-primary:focus {
-      background-color: #274a85;
-      outline: none;
+    .stat-label {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    /* Testimonials */
+    .testimonials {
+      padding: 5rem 1rem;
+      background-color: var(--white);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .testimonial {
+      background-color: var(--ash);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .testimonial-content {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .testimonial-content p {
+      color: #666;
+      font-style: italic;
+    }
+
+    .testimonial-content::before {
+    content: "";
+    font-size: 4rem;
+    color: var(--light-blue);
+    position: absolute;
+    top: -20px;
+    left: -10px;
+    opacity: 0.2;
+    font-family: Georgia, serif;
+}
+
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .author-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: var(--dark-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .author-info h4 {
+      color: var(--dark-blue);
+      margin-bottom: 0.2rem;
+    }
+
+    .author-info p {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    /* Call to Action */
+    .cta {
+      padding: 5rem 1rem;
+      background: linear-gradient(135deg, var(--dark-blue), var(--light-blue));
+      color: white;
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .cta p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      opacity: 0.9;
     }
 
     /* Footer */
     footer {
-      background-color: var(--light-blue);
       text-align: center;
-      padding: 1rem 0;
-      color: var(--dark-blue);
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin-top: 4rem;
-      user-select: none;
+      padding: 2rem 1rem;
+      background-color: var(--white);
+      border-top: 2px solid var(--light-blue);
     }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      nav .container {
-        flex-direction: column;
-        gap: 0.8rem;
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-logo {
+      font-weight: 700;
+      font-size: 2rem;
+      color: var(--dark-blue);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--dark-blue);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--btn-hover);
+      text-decoration: underline;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--light-blue);
+      color: var(--dark-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      background-color: var(--dark-blue);
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    .copyright {
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 1.5rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 900px) {
+      .hero h1 {
+        font-size: 2.5rem;
       }
-      nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
+      
+      .hero p {
+        font-size: 1.1rem;
       }
-      header.hero h1 {
+      
+      .section-header h2 {
         font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        padding: 3rem 1rem;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn {
+        width: 100%;
+        max-width: 250px;
+        justify-content: center;
+      }
+      
+      .features, .how-it-works, .testimonials, .cta {
+        padding: 3rem 1rem;
+      }
+      
+      .user-actions .profile span {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding: 0.8rem;
+      }
+      
+      header .logo {
+        font-size: 1.5rem;
+      }
+      
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+      
+      .footer-links {
+        flex-direction: column;
+        gap: 1rem;
       }
     }
   </style>
 </head>
 <body>
-
-  <nav role="navigation" aria-label="Primary Navigation">
-    <div class="container">
-      <div class="logo" tabindex="0">WorkBridge</div>
-      <ul>
-        <li><a href="index.html" aria-current="page">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="search.html">Find Jobs/Services</a></li>
-        <li><a href="post-job.html">Post Job/Service</a></li>
-        <li><a href="dashboard.html">Dashboard</a></li>
-        <li><a href="notifications.html">Notifications</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="terms.html">Terms & Privacy</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="login.html">Login</a></li>
-      </ul>
+  <!-- Header -->
+  <header>
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div class="logo">
+      <i class="fas fa-bridge"></i> WorkBridge
     </div>
-  </nav>
-
-  <header class="hero" role="banner">
-    <h1>Connecting Bangladesh’s Workforce to Opportunities</h1>
-    <p>WorkBridge is a decentralized job and service platform making informal work safer and easier to find.</p>
-    <a href="register.html" class="btn-primary" role="button">Get Started</a>
+    <div class="user-actions">
+      <div class="notification-badge" onclick="showNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="badge">3</span>
+      </div>
+      <div class="profile" onclick="toggleProfileMenu()">
+        <div class="profile-img">TS</div>
+        <span>Turan Smith</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
   </header>
 
-  <footer role="contentinfo">
-    &copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <h2><i class="fas fa-bars"></i> Menu</h2>
+    <ul>
+      <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="search.html"><i class="fas fa-search"></i> Find Jobs/Services</a></li>
+      <li><a href="post-job.html"><i class="fas fa-bullhorn"></i> Post Job/Service</a></li>
+      <li><a href="dashboard.html"><i class="fas fa-chart-bar"></i> Dashboard</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="messages.html"><i class="fas fa-envelope"></i> Messages</a></li>
+      <li><a href="saved-jobs.html"><i class="fas fa-bookmark"></i> Saved Jobs</a></li>
+      <li><a href="applications.html"><i class="fas fa-file-alt"></i> Applications</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="terms.html"><i class="fas fa-file-contract"></i> Terms & Privacy</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="login.html" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+  <!-- Hero Section -->
+  <section class="hero" role="banner">
+    <div class="hero-content">
+      <h1>Connecting Bangladesh's Workforce to Opportunities</h1>
+      <p>WorkBridge is a decentralized job and service platform making informal work safer and easier to find.</p>
+      <div class="hero-buttons">
+        <a href="register.html" class="btn btn-primary">
+          <i class="fas fa-user-plus"></i> Get Started
+        </a>
+        <a href="search.html" class="btn btn-secondary">
+          <i class="fas fa-search"></i> Browse Jobs
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="section-header">
+      <h2>Why Choose WorkBridge?</h2>
+      <p>We provide a seamless platform connecting skilled workers with those who need their services</p>
+    </div>
+    
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3>Safe & Secure</h3>
+        <p>Verified profiles and secure payment systems ensure safe transactions for both workers and employers.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <h3>Quick & Efficient</h3>
+        <p>Find or offer services quickly with our streamlined platform designed for Bangladesh's workforce.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-rupee-sign"></i>
+        </div>
+        <h3>Fair Pricing</h3>
+        <p>Transparent pricing and negotiation tools ensure fair compensation for services rendered.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="how-it-works">
+    <div class="section-header">
+      <h2>How WorkBridge Works</h2>
+      <p>Simple steps to get started with our platform</p>
+    </div>
+    
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Create Profile</h3>
+        <p>Sign up and create a detailed profile showcasing your skills, experience, and portfolio.</p>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Find Opportunities</h3>
+        <p>Browse available jobs or services that match your skills and preferences.</p>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Connect & Work</h3>
+        <p>Communicate with clients, agree on terms, and complete the work successfully.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number">10,000+</div>
+        <div class="stat-label">Active Users</div>
+      </div>
+      
+      <div class="stat-item">
+        <div class="stat-number">5,000+</div>
+        <div class="stat-label">Jobs Completed</div>
+      </div>
+      
+      <div class="stat-item">
+        <div class="stat-number">200+</div>
+        <div class="stat-label">Cities Covered</div>
+      </div>
+      
+      <div class="stat-item">
+        <div class="stat-number">98%</div>
+        <div class="stat-label">Satisfaction Rate</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials">
+    <div class="section-header">
+      <h2>What Our Users Say</h2>
+      <p>Real stories from people who have found success with WorkBridge</p>
+    </div>
+    
+    <div class="testimonials-grid">
+      <div class="testimonial">
+        <div class="testimonial-content">
+          <p>"WorkBridge helped me find reliable electricians for my restaurant renovation. The platform is easy to use and the quality of service was exceptional."</p>
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">RH</div>
+          <div class="author-info">
+            <h4>Rahim Hossain</h4>
+            <p>Restaurant Owner, Dhaka</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="testimonial">
+        <div class="testimonial-content">
+          <p>"As a freelance graphic designer, WorkBridge has connected me with clients who value my skills. I've doubled my income since joining the platform."</p>
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">SA</div>
+          <div class="author-info">
+            <h4>Salma Akter</h4>
+            <p>Graphic Designer, Chittagong</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="testimonial">
+        <div class="testimonial-content">
+          <p>"Finding skilled plumbers used to be a challenge until I discovered WorkBridge. Now I can quickly find qualified professionals for all my properties."</p>
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">MK</div>
+          <div class="author-info">
+            <h4>Mohammad Khan</h4>
+            <p>Property Manager, Sylhet</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="cta">
+    <h2>Ready to Get Started?</h2>
+    <p>Join thousands of Bangladeshis who are finding and offering services through WorkBridge</p>
+    <div class="hero-buttons">
+      <a href="register.html" class="btn btn-primary">
+        <i class="fas fa-user-plus"></i> Create Account
+      </a>
+      <a href="about.html" class="btn btn-secondary">
+        <i class="fas fa-info-circle"></i> Learn More
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <i class="fas fa-bridge"></i> WorkBridge
+      </div>
+      
+      <div class="footer-links">
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact</a>
+        <a href="terms.html">Terms & Privacy</a>
+        <a href="help.html">Help Center</a>
+      </div>
+      
+      <div class="social-links">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+      
+      <div class="copyright">
+        &copy; 2025 WorkBridge — Empowering Jobs & Services in Bangladesh
+      </div>
+    </div>
   </footer>
 
+  <script>
+    // DOM Elements
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const logoutLink = document.getElementById('logout-link');
+    
+    // Toggle sidebar menu
+    function toggleMenu() {
+      if (sidebar.style.left === '0px') {
+        sidebar.style.left = '-250px';
+        overlay.style.display = 'none';
+      } else {
+        sidebar.style.left = '0px';
+        overlay.style.display = 'block';
+      }
+    }
+    
+    // Show notifications
+    function showNotifications() {
+      // In a real app, this would show notifications
+      alert("You have 3 unread notifications");
+    }
+    
+    // Toggle profile menu (would be implemented with a dropdown)
+    function toggleProfileMenu() {
+      // In a real app, this would toggle a profile dropdown
+      alert("Profile menu would open here");
+    }
+    
+    // Handle logout
+    logoutLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      // In a real app, this would log the user out
+      alert("You have been logged out successfully");
+    });
+  </script>
 </body>
 </html>
