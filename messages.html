@@ -19,6 +19,8 @@
       --danger: #f44336;
       --message-sent: #a8c0ff;
       --message-received: #e3e6e8;
+      --online-status: #4caf50;
+      --offline-status: #9e9e9e;
     }
     * {
       margin: 0; padding: 0; box-sizing: border-box;
@@ -167,6 +169,7 @@
       max-width: 1200px;
       margin: 2rem auto;
       padding: 0 1rem;
+      width: 100%;
     }
     
     aside.dashboard-sidebar {
@@ -255,6 +258,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       display: flex;
       overflow: hidden;
+      height: calc(100vh - 180px);
     }
     
     .conversations-sidebar {
@@ -262,16 +266,20 @@
       border-right: 1px solid #eee;
       display: flex;
       flex-direction: column;
+      transition: all 0.3s ease;
     }
     
     .conversations-header {
       padding: 1.5rem;
       border-bottom: 1px solid #eee;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
     
     .conversations-header h2 {
       color: var(--dark-blue);
-      margin-bottom: 1rem;
+      margin-bottom: 0;
     }
     
     .conversation-search {
@@ -329,6 +337,29 @@
       font-weight: bold;
       margin-right: 1rem;
       flex-shrink: 0;
+      position: relative;
+    }
+    
+    .online-indicator {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 12px;
+      height: 12px;
+      background-color: var(--online-status);
+      border: 2px solid white;
+      border-radius: 50%;
+    }
+    
+    .offline-indicator {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 12px;
+      height: 12px;
+      background-color: var(--offline-status);
+      border: 2px solid white;
+      border-radius: 50%;
     }
     
     .conversation-info {
@@ -343,6 +374,9 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
     
     .conversation-preview {
@@ -382,6 +416,7 @@
       flex: 1;
       display: flex;
       flex-direction: column;
+      position: relative;
     }
     
     .chat-header {
@@ -390,6 +425,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      background-color: white;
+      z-index: 10;
     }
     
     .chat-user {
@@ -408,6 +445,7 @@
       justify-content: center;
       font-weight: bold;
       margin-right: 1rem;
+      position: relative;
     }
     
     .chat-user-info h3 {
@@ -418,6 +456,24 @@
     .chat-user-info p {
       font-size: 0.8rem;
       color: #777;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    
+    .status-online {
+      background-color: var(--online-status);
+    }
+    
+    .status-offline {
+      background-color: var(--offline-status);
     }
     
     .chat-actions {
@@ -440,6 +496,7 @@
       display: flex;
       flex-direction: column;
       gap: 1rem;
+      background-color: #f9f9f9;
     }
     
     .message {
@@ -448,6 +505,7 @@
       border-radius: 18px;
       position: relative;
       line-height: 1.4;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
     
     .message.sent {
@@ -479,6 +537,7 @@
       display: flex;
       align-items: center;
       gap: 1rem;
+      background-color: white;
     }
     
     .chat-input input {
@@ -518,6 +577,11 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .chat-send-btn:hover {
+      background-color: var(--btn-hover);
     }
     
     .empty-chat {
@@ -528,6 +592,7 @@
       justify-content: center;
       padding: 2rem;
       color: #777;
+      text-align: center;
     }
     
     .empty-chat i {
@@ -539,6 +604,16 @@
     .empty-chat h3 {
       color: var(--dark-blue);
       margin-bottom: 0.5rem;
+    }
+    
+    .back-to-conversations {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--dark-blue);
+      cursor: pointer;
+      font-size: 1.2rem;
+      margin-right: 0.5rem;
     }
     
     .toast {
@@ -599,7 +674,8 @@
       text-decoration: underline;
     }
     
-    @media (max-width: 900px) {
+    /* Mobile Responsiveness */
+    @media (max-width: 992px) {
       main {
         flex-direction: column;
       }
@@ -621,7 +697,49 @@
       }
     }
     
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
+      .messages-container {
+        height: calc(100vh - 140px);
+        border-radius: 0;
+        margin: 0;
+      }
+      
+      .conversations-sidebar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        z-index: 50;
+        max-height: none;
+      }
+      
+      .chat-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        z-index: 60;
+        display: none;
+      }
+      
+      .back-to-conversations {
+        display: block;
+      }
+      
+      .chat-active {
+        display: flex !important;
+        flex-direction: column;
+        height: 100%;
+      }
+      
+      .message {
+        max-width: 85%;
+      }
+      
       .user-actions .profile span {
         display: none;
       }
@@ -643,9 +761,27 @@
       .chat-messages {
         padding: 1rem;
       }
+    }
+    
+    @media (max-width: 480px) {
+      header {
+        padding: 0.8rem;
+      }
+      
+      .logo {
+        font-size: 1.5rem;
+      }
+      
+      .chat-input {
+        padding: 0.8rem;
+      }
+      
+      .chat-input input {
+        padding: 0.7rem 1rem;
+      }
       
       .message {
-        max-width: 85%;
+        max-width: 90%;
       }
     }
   </style>
@@ -726,12 +862,12 @@
     </aside>
 
     <div class="messages-container">
-      <div class="conversations-sidebar">
+      <div class="conversations-sidebar" id="conversations-sidebar">
         <div class="conversations-header">
           <h2>Messages</h2>
           <div class="conversation-search">
             <i class="fas fa-search"></i>
-            <input type="text" placeholder="Search conversations...">
+            <input type="text" placeholder="Search conversations..." id="search-conversations">
           </div>
         </div>
         <div class="conversations-list" id="conversations-list">
@@ -748,11 +884,17 @@
         
         <div class="chat-active" id="chat-active" style="display: none;">
           <div class="chat-header">
+            <button class="back-to-conversations" id="back-to-conversations">
+              <i class="fas fa-arrow-left"></i>
+            </button>
             <div class="chat-user">
               <div class="chat-user-avatar" id="chat-user-avatar">EA</div>
               <div class="chat-user-info">
                 <h3 id="chat-user-name">Employer A</h3>
-                <p id="chat-user-status">Online</p>
+                <p id="chat-user-status">
+                  <span class="status-indicator" id="status-indicator"></span>
+                  <span id="status-text">Online</span>
+                </p>
               </div>
             </div>
             <div class="chat-actions">
@@ -940,6 +1082,17 @@
     ];
     
     let activeConversation = null;
+    let isMobileView = window.innerWidth <= 768;
+    
+    // Handle window resize
+    window.addEventListener('resize', function() {
+      isMobileView = window.innerWidth <= 768;
+      
+      if (!isMobileView && activeConversation) {
+        document.getElementById('conversations-sidebar').style.display = 'flex';
+        document.getElementById('chat-container').style.display = 'flex';
+      }
+    });
     
     // Render conversations
     function renderConversations() {
@@ -955,9 +1108,11 @@
         }
         
         convoElement.innerHTML = `
-          <div class="conversation-avatar">${convo.avatar}</div>
+          <div class="conversation-avatar">${convo.avatar}
+            ${convo.online ? '<span class="online-indicator"></span>' : '<span class="offline-indicator"></span>'}
+          </div>
           <div class="conversation-info">
-            <h3>${convo.name}</h3>
+            <h3>${convo.name} ${convo.online ? '<span class="status-indicator status-online"></span>' : ''}</h3>
             <p class="conversation-preview">${convo.preview}</p>
           </div>
           <div class="conversation-meta">
@@ -988,10 +1143,30 @@
       // Update chat header
       document.getElementById('chat-user-avatar').textContent = activeConversation.avatar;
       document.getElementById('chat-user-name').textContent = activeConversation.name;
-      document.getElementById('chat-user-status').textContent = activeConversation.online ? 'Online' : 'Offline';
+      
+      const statusIndicator = document.getElementById('status-indicator');
+      const statusText = document.getElementById('status-text');
+      
+      if (activeConversation.online) {
+        statusIndicator.className = 'status-indicator status-online';
+        statusText.textContent = 'Online';
+      } else {
+        statusIndicator.className = 'status-indicator status-offline';
+        statusText.textContent = 'Offline';
+      }
       
       // Render messages
       renderMessages();
+      
+      // Mark as read
+      activeConversation.unread = 0;
+      renderConversations();
+      
+      // For mobile view, show only chat
+      if (isMobileView) {
+        document.getElementById('conversations-sidebar').style.display = 'none';
+        document.getElementById('chat-container').style.display = 'flex';
+      }
     }
     
     // Render messages
@@ -1070,6 +1245,30 @@
         if (e.key === 'Enter') {
           sendMessage();
         }
+      });
+      
+      // Back to conversations for mobile view
+      document.getElementById('back-to-conversations').addEventListener('click', () => {
+        if (isMobileView) {
+          document.getElementById('conversations-sidebar').style.display = 'flex';
+          document.getElementById('chat-container').style.display = 'none';
+        }
+      });
+      
+      // Search conversations
+      document.getElementById('search-conversations').addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        
+        document.querySelectorAll('.conversation-item').forEach(item => {
+          const name = item.querySelector('h3').textContent.toLowerCase();
+          const preview = item.querySelector('.conversation-preview').textContent.toLowerCase();
+          
+          if (name.includes(searchTerm) || preview.includes(searchTerm)) {
+            item.style.display = 'flex';
+          } else {
+            item.style.display = 'none';
+          }
+        });
       });
     };
   </script>
